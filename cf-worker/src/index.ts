@@ -63,6 +63,8 @@ export default {
       subject: email.subject,
       body: email.html || email.text,
       receivedAt: new Date().toISOString(), // Current timestamp as the received time.
+      assistantId: 'asst_uJCTAaXnBqTDzMG2FfgwJEtJ',
+      assistantThreadId: null,
     };
 
     // Define the endpoint URL for your `rfq-email.ts` API.
@@ -82,7 +84,18 @@ export default {
       }
 
       // Optionally, log or process the successful response.
-      await message.forward("njaunich@kodiakllc.io");
+      // await message.forward("njaunich@kodiakllc.io");
+      // send the response data to slack
+      await fetch('https://hooks.slack.com/services/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', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application-json',
+        },
+        body: JSON.stringify({
+          text: `Email successfully processed: \`\`\`${JSON.stringify(response)}\`\`\``
+        })
+      });
+
     } catch (error: any) {
       console.error('Error processing email:', error.toString());
       message.setReject('Error processing email');
