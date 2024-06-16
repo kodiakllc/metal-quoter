@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// tailored for the metal-quoter project utilizing the latest in database management practices.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL") // uses direct connection
+}
+
+// Define a Customer model
+model Customer {
+  id             Int      @id @default(autoincrement())
+  companyName    String
+  contactPerson  String?
+  emailAddress   String   @unique
+  phoneNumber    String?
+  address        String?
+  quotes         Quote[]  // This indicates that a Customer can have many Quotes
+  rfqs           RFQ[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Define a Product model
+model Product {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  category       String?
+  stockItems     StockItem[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+// Define a Stock Item model
+model StockItem {
+  id               Int      @id @default(autoincrement())
+  productId        Int
+  specification    Json     // Using JSON for flexible spec storage
+  quantityInStock  Int
+  unitPrice        Float
+  product          Product  @relation(fields: [productId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// Define an RFQ (Request For Quote) model
+model RFQ {
+  id                   Int                  @id @default(autoincrement())
+  customerId           Int
+  details              String               // Could be a JSON string for structured data
+  deliveryRequirements String?
+  status               String               @default("pending")
+  customer             Customer             @relation(fields: [customerId], references: [id])
+  customProcessingRequests CustomProcessingRequest[]
+  quotes               Quote[]
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+}
+
+// Define a Quote model
+model Quote {
+  id                    Int      @id @default(autoincrement())
+  rfqId                 Int
+  customerId            Int
+  totalPrice            Float
+  deliveryOptions       String?
+  paymentTerms          String
+  validityPeriod        DateTime
+  additionalInformation String?
+  status                String   @default("draft")
+  rfq                   RFQ      @relation(fields: [rfqId], references: [id])
+  customer              Customer @relation(fields: [customerId], references: [id])
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+// Optional: Define a model for custom processing requests linked to RFQs
+model CustomProcessingRequest {
+  id                   Int      @id @default(autoincrement())
+  rfqId                Int
+  processingType       String
+  specifications       Json     // Details about the processing request as JSON
+  rfq                  RFQ      @relation(fields: [rfqId], references: [id])
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

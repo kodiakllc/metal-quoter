@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "./dist/prisma",
+    "rootDir": "./prisma",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": false,
+    "declaration": false
+  },
+  "include": ["prisma/**/*.ts"],
+  "exclude": ["node_modules", ".next", "next-env.d.ts"]
+}
