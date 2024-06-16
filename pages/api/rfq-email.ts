@@ -1,5 +1,5 @@
 // pages/api/rfq-email.ts
-import prisma from "@/lib/prisma-client";
+import prisma from "@/lib/prisma-client-edge";
 
 export const config = {
   runtime: 'edge',

@@ -25,6 +25,7 @@
     "@langchain/community": "0.0.15",
     "@langchain/openai": "0.0.10",
     "@mui/material": "^5.13.7",
+    "@prisma/adapter-pg": "^5.15.0",
     "@prisma/client": "^5.15.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -82,6 +83,7 @@
     "nookies": "^2.5.2",
     "openai": "3.3.0",
     "pdf-parse": "1.1.1",
+    "pg": "^8.12.0",
     "prisma": "^5.15.0",
     "react": "18.2.0",
     "react-audio-voice-recorder": "^2.2.0",
@@ -116,6 +118,7 @@
     "@types/jsesc": "^3.0.1",
     "@types/lodash": "^4.14.198",
     "@types/node": "^18.15.0",
+    "@types/pg": "^8.11.6",
     "@types/prettier": "^2.7.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -139,6 +142,7 @@
     "tailwindcss": "^3.2.7",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5",
-    "vitest": "^0.29.7"
+    "vitest": "^0.29.7",
+    "wrangler": "^3.60.3"
   }
 }
