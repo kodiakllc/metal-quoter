@@ -66,16 +66,17 @@ model RFQ {
 
 // Define an Email model for incoming emails that will potentially become RFQs
 model Email {
-  id          Int       @id @default(autoincrement())
-  sender      String // Email address of the sender
-  recipient   String // Email address of the recipient
-  subject     String?
-  body        String // The content of the email
-  receivedAt  DateTime  @default(now()) // When the email was received
-  processedAt DateTime? // When the email was processed into an RFQ, if applicable
-  rfqId       Int? // Optionally link to an RFQ if the email leads to one being created
-  rfq         RFQ?      @relation(fields: [rfqId], references: [id]) // The relation to the RFQ model
-  createdAt   DateTime  @default(now())
+  id               Int       @id @default(autoincrement())
+  sender           String // Email address of the sender
+  recipient        String // Email address of the recipient
+  subject          String?
+  body             String // The content of the email
+  receivedAt       DateTime  @default(now()) // When the email was received
+  proccesingStatus String    @default("pending") // Status of processing the email
+  processedAt      DateTime? // When the email was processed into an RFQ, if applicable
+  rfqId            Int? // Optionally link to an RFQ if the email leads to one being created
+  rfq              RFQ?      @relation(fields: [rfqId], references: [id]) // The relation to the RFQ model
+  createdAt        DateTime  @default(now())
 }
 
 // Define a Quote model
