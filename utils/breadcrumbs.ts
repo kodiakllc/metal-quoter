@@ -24,7 +24,9 @@ export const generateBreadcrumbs = (path: string, query: ParsedUrlQuery): MQBrea
       //@ts-expect-error
       Array.isArray(query[curr]) ? query[curr][0] : query[curr] || curr
     );
-    breadcrumbs.push({ label, href });
+    if (label) {
+      breadcrumbs.push({ label, href });
+    }
     return href;
   }, '');
 
