@@ -1,4 +1,4 @@
-// components/ProductTable.tsx
+// components/Products/ProductTable.tsx
 import {
   File,
   Home,

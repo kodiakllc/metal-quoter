@@ -1,3 +1,4 @@
+// pages/api/home/home.state.tsx
 export interface HomeInitialState {
   apiKey: string;
   guestCode: string;
