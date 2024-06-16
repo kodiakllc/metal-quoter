@@ -6,9 +6,11 @@ export interface MQBreadcrumbItem {
   href: string;
 }
 
-// Function to capitalize the first letter of a string and remove #
-const capitalizeAndClean = (s: string) => {
-  return s.charAt(0).toUpperCase() + s.slice(1).replace('#', '');
+// Function to capitalize the first letter of a string and remove # characters
+const capitalizeAndClean = (s: string): string => {
+  let cleanedString = s.replace(/#/g, '');
+  if (!cleanedString) return cleanedString;
+  return cleanedString.charAt(0).toUpperCase() + cleanedString.slice(1);
 };
 
 export const generateBreadcrumbs = (path: string, query: ParsedUrlQuery): MQBreadcrumbItem[] => {
