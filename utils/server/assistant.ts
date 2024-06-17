@@ -82,52 +82,58 @@ const rfqExtractionInstructions = `
   Here is the structure of the RFQ data you will receive:
   \`\`\`json
   {
-    "customerEmail": "string",
-    "customerName": "string",
-    "contactPerson": "string",
-    "phoneNumber": "string",
-    "address": "string",
-    "details": [
-      {
-        "name": "string",
-        "specification": {
-          "grade": "string",
-          "thickness": "string",
-          "width": "string",
-          "length": "string"
-        },
-        "quantity": "number"
-      }
-    ],
-    "deliveryRequirements": "string",
-    "additionalServices": "string",
-    "customProcessingRequests": [
-      {
-        "processingType": "string",
-        "specifications": {
-          "key": "value"
+    "rfq": {
+      "customerEmail": "string",
+      "customerName": "string",
+      "contactPerson": "string",
+      "phoneNumber": "string",
+      "address": "string",
+      "details": [
+        {
+          "name": "string",
+          "specification": {
+            "grade": "string",
+            "thickness": "string",
+            "width": "string",
+            "length": "string"
+          },
+          "quantity": "number"
         }
-      }
-    ]
+      ],
+      "deliveryRequirements": "string",
+      "additionalServices": "string",
+      "customProcessingRequests": [
+        {
+          "processingType": "string",
+          "specifications": {
+            "key": "value"
+          }
+        }
+      ]
+    }
   }
   \`\`\`
 
   Here is the structure of the Stock Items data you have access to:
   \`\`\`json
   {
-    "productId": "int",
-    "specification": {
-      "grade": "string",
-      "diameter": "string",
-      "wallThickness": "string"
-    },
-    "quantityInStock": "int",
-    "unitPrice": "float",
-    "product": {
-      "name": "string",
-      "description": "string",
-      "category": "string"
-    },
+    "stockItems": [
+      {
+        "productId": "int",
+        "specification": {
+          "grade": "string",
+          "diameter": "string",
+          "wallThickness": "string"
+        },
+        "quantityInStock": "int",
+        "unitPrice": "float",
+        "product": {
+          "name": "string",
+          "description": "string",
+          "category": "string"
+        },
+      }
+    ]
   }
 
   Your task is to generate a structured Quote object based on this RFQ data. Here are the steps you need to follow:
@@ -147,6 +153,7 @@ const rfqExtractionInstructions = `
       - **paymentTerms**: Set standard payment terms (e.g., "30 days net").
       - **validityPeriod**: The period for which the quote is valid (e.g., 30 days from the current date).
       - **additionalInformation**: Any additional information derived from the RFQ or standard information.
+      - **logicBehindThePrice**: A brief explanation of how the total price was calculated, including any additional costs, and be very specific and detailed, but also concise.
       - **status**: Set the status of the quote to "draft".
 
   3. **Format the Quote Object:**
@@ -161,6 +168,7 @@ const rfqExtractionInstructions = `
     "paymentTerms": "string",
     "validityPeriod": "DateTime",
     "additionalInformation": "string",
+    "logicBehindThePrice": "string",
     "status": "string"
   }
   \`\`\`

@@ -26,6 +26,7 @@ export const sendQuoteToSlack = async (quoteData: QuoteDTO) => {
       - Payment Terms: ${quoteData.paymentTerms}\n
       - Validity Period: ${quoteData.validityPeriod}\n
       - Additional Information: ${quoteData.additionalInformation}\n
+      - Logic Behind The Price: ${quoteData.logicBehindThePrice}\n
       - Status: ${quoteData.status}`,
     }),
   });

@@ -2,7 +2,8 @@
 import prisma from "@/lib/prisma-client-edge";
 import { sendQuoteToSlack, sendRFQToSlack } from '@/utils/server/slack';
 import { rfqExtractionInstructions, runAssistant } from '@/utils/server/assistant';
-import { getEmailToRFQMessage, createRFQ, convertRFQToQuote } from '@/utils/server/rfq';
+import { getEmailToRFQMessage, createRFQ } from '@/utils/server/rfq';
+import { convertRFQToQuote } from '@/utils/server/quote';
 import { quoteToQuoteDTO } from '@/utils/server/quote';
 import { findCustomerThreadId } from '@/utils/server/customer';
 

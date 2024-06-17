@@ -92,6 +92,7 @@ model Quote {
   paymentTerms          String
   validityPeriod        DateTime
   additionalInformation String?
+  logicBehindThePrice   String?
   status                String   @default("draft")
   rfq                   RFQ      @relation(fields: [rfqId], references: [id])
   customer              Customer @relation(fields: [customerId], references: [id])

@@ -12,5 +12,6 @@ export interface QuoteDTO {
   paymentTerms: string;
   validityPeriod: string;
   additionalInformation: string | null;
+  logicBehindThePrice: string | null;
   status: string;
 }

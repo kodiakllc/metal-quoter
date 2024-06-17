@@ -53,49 +53,6 @@ const toRFQDTO = async (rfq: RFQ): Promise<RFQDTO> => {
   };
 };
 
-const convertRFQToQuote = async (assistantId: string, rfq: RFQ):
-Promise<{ quote: Quote, threadId: string }> => {
-  const rfqDTO: RFQDTO = await toRFQDTO(rfq);
-
-  // grab all the stock items from the database
-  const stockItems = await prisma.stockItem.findMany();
-  // fetch the product for each stock item
-  const stockItemsWithProducts = await Promise.all(
-    stockItems.map(async (stockItem) => {
-      const product = await prisma.product.findUnique({
-        where: { id: stockItem.productId },
-      });
-
-      return {
-        ...stockItem,
-        product: product || null,
-      };
-    })
-  );
-
-  const message = JSON.stringify({
-    rfq: rfqDTO,
-    stockItems: stockItemsWithProducts,
-  });
-
-  const { structuredData: quoteData, threadId } = await runAssistant(
-    assistantId,
-    null,
-    convertRFQToQuoteInstructions,
-    message
-  );
-
-  const quote = await prisma.quote.create({
-    data: {
-      ...quoteData,
-      rfqId: rfq.id,
-      customerId: rfq.customerId,
-    },
-  });
-
-  return { quote, threadId };
-};
-
 const createRFQ = async (rfqData: RFQDTO) => {
   const customer = await findOrCreateCustomer(rfqData.customerEmail, rfqData.customerName, rfqData.contactPerson, rfqData.phoneNumber, rfqData.address);
 
@@ -126,7 +83,6 @@ const createRFQ = async (rfqData: RFQDTO) => {
 
 export {
   getEmailToRFQMessage,
-  convertRFQToQuote,
   toRFQDTO,
   createRFQ,
 }
