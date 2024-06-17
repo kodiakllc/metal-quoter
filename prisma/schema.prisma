@@ -16,8 +16,8 @@ datasource db {
 // Define a Customer model
 model Customer {
   id            Int      @id @default(autoincrement())
-  companyName   String
-  contactPerson String?
+  companyName   String?
+  contactPerson String
   emailAddress  String   @unique
   phoneNumber   String?
   address       String?
