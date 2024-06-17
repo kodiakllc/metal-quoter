@@ -9,7 +9,13 @@ const findCustomerThreadId = async (customerEmail: string) => {
   return customer?.threadId ?? null;
 }
 
-const findOrCreateCustomer = (customerEmail: string, customerName: string, contactPerson: string, phoneNumber: string, address: string) => {
+const findCustomerById = async (customerId: number) => {
+  return prisma.customer.findFirst({
+    where: { id: customerId },
+  });
+}
+
+const findOrCreateCustomer = async (customerEmail: string, customerName: string, contactPerson: string, phoneNumber: string, address: string) => {
   return prisma.customer.upsert({
     where: { emailAddress: customerEmail },
     update: {},
@@ -24,6 +30,7 @@ const findOrCreateCustomer = (customerEmail: string, customerName: string, conta
 }
 
 export {
+  findCustomerById,
   findCustomerThreadId,
   findOrCreateCustomer,
 }

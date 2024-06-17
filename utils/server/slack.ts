@@ -1,5 +1,5 @@
 // /utils/server/slack.ts
-import { rFQDTO } from '@/types/dto';
+import { RFQDTO, QuoteDTO } from '@/types/dto';
 
 if (!process.env.SLACK_WEBHOOK_URL) {
   throw new Error('SLACK_WEBHOOK_URL is not defined');
@@ -7,7 +7,32 @@ if (!process.env.SLACK_WEBHOOK_URL) {
 
 const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 
-export const sendRFQToSlack = async (rfqData: rFQDTO) => {
+export const sendQuoteToSlack = async (quoteData: QuoteDTO) => {
+  await fetch(SLACK_WEBHOOK_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: `Quote successfully created:\n
+      - Customer Email: ${quoteData.customerEmail}\n
+      - Customer Name: ${quoteData.customerName}\n
+      - Contact Person: ${quoteData.contactPerson}\n
+      - Phone Number: ${quoteData.phoneNumber}\n
+      - Address: ${quoteData.address}\n
+      - RFQ ID: ${quoteData.rfqId}\n
+      - Total Price: $${quoteData.totalPrice.toFixed(2)}\n
+      - Delivery Options: ${quoteData.deliveryOptions}\n
+      - Payment Terms: ${quoteData.paymentTerms}\n
+      - Validity Period: ${quoteData.validityPeriod}\n
+      - Additional Information: ${quoteData.additionalInformation}\n
+      - Status: ${quoteData.status}`,
+    }),
+  });
+};
+
+
+export const sendRFQToSlack = async (rfqData: RFQDTO) => {
   await fetch(SLACK_WEBHOOK_URL, {
     method: 'POST',
     headers: {

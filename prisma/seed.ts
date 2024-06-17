@@ -25,49 +25,124 @@ async function main() {
     },
   });
 
-  const product = await prisma.product.create({
-    data: {
+  // Create various products
+  const products = [
+    {
       name: 'Aluminum Coil',
       description: 'High-grade aluminum coil for industrial use',
       category: 'Coil',
     },
-  });
+    {
+      name: 'Stainless Steel Tube',
+      description: 'Durable stainless steel tubes',
+      category: 'Tube',
+    },
+    {
+      name: 'Copper Sheet',
+      description: 'High-quality copper sheets for electrical applications',
+      category: 'Sheet',
+    },
+    {
+      name: 'Carbon Steel Plate',
+      description: 'Strong carbon steel plates for construction',
+      category: 'Plate',
+    },
+  ];
 
-  const stockItem = await prisma.stockItem.create({
-    data: {
-      productId: product.id,
-      specification: JSON.stringify({
+  const createdProducts = await Promise.all(
+    products.map((product) => prisma.product.create({ data: product }))
+  );
+
+  // Create stock items for each product
+  const stockItems = [
+    {
+      productId: createdProducts[0].id,
+      specification: {
         alloy: '5052',
         thickness: '0.5mm',
         width: '1500mm',
-      }),
+      },
       quantityInStock: 100,
       unitPrice: 20.5,
     },
-  });
+    {
+      productId: createdProducts[1].id,
+      specification: {
+        grade: '304',
+        diameter: '25mm',
+        wallThickness: '1mm',
+      },
+      quantityInStock: 200,
+      unitPrice: 15.0,
+    },
+    {
+      productId: createdProducts[2].id,
+      specification: {
+        type: 'C110',
+        thickness: '0.5mm',
+        size: '1000mm x 2000mm',
+      },
+      quantityInStock: 150,
+      unitPrice: 10.0,
+    },
+    {
+      productId: createdProducts[3].id,
+      specification: {
+        grade: 'A36',
+        thickness: '10mm',
+        size: '2000mm x 3000mm',
+      },
+      quantityInStock: 50,
+      unitPrice: 50.0,
+    },
+    {
+      productId: createdProducts[3].id,
+      specification: {
+        grade: 'A516',
+        thickness: '20mm',
+        size: '2500mm x 6000mm',
+      },
+      quantityInStock: 30,
+      unitPrice: 75.0,
+    },
+    {
+      productId: createdProducts[1].id,
+      specification: {
+        grade: '316',
+        diameter: '50mm',
+        wallThickness: '2mm',
+      },
+      quantityInStock: 80,
+      unitPrice: 25.0,
+    },
+  ];
+
+  const createdStockItems = await Promise.all(
+    stockItems.map((stockItem) => prisma.stockItem.create({ data: stockItem }))
+  );
 
   const rfq = await prisma.rFQ.create({
     data: {
       customerId: customer.id,
-      details: JSON.stringify([
+      details: [
         {
           name: 'Aluminum Coil',
           specification: {
-            grade: '5052',
+            alloy: '5052',
             thickness: '0.5mm',
             width: '1500mm',
             length: '2000mm',
           },
           quantity: 20,
         },
-      ]),
+      ],
       deliveryRequirements: 'Deliver to Springfield by 2023-12-25',
       status: 'pending',
       customProcessingRequests: {
         create: [
           {
             processingType: 'Cutting',
-            specifications: JSON.stringify({ length: '2000mm' }),
+            specifications: { length: '2000mm' },
           },
         ],
       },
@@ -87,7 +162,7 @@ async function main() {
     },
   });
 
-  console.log({ customer, product, stockItem, rfq, quote });
+  console.log({ customer, products: createdProducts, stockItems: createdStockItems, rfq, quote });
 }
 
 main()

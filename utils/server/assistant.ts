@@ -1,5 +1,6 @@
 // /utils/server/assistant.ts
 import openai from '@/lib/openai';
+import { toRFQDTO } from '@/utils/server/rfq';
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';
 
 const rfqExtractionInstructions = `
@@ -73,6 +74,100 @@ const rfqExtractionInstructions = `
   Here is the email content:
   `;
 
+  const convertRFQToQuoteInstructions = `
+  You are a highly advanced AI model tasked with converting structured Request For Quote (RFQ) data into a structured Quote for the metal service center's system. The RFQ data includes details about the customer, requested products, delivery requirements, and any additional services.
+
+  From the provided RFQ data, you will generate a structured Quote object. Ensure that all fields are filled out accurately based on the provided data and your calculations.
+
+  Here is the structure of the RFQ data you will receive:
+  \`\`\`json
+  {
+    "customerEmail": "string",
+    "customerName": "string",
+    "contactPerson": "string",
+    "phoneNumber": "string",
+    "address": "string",
+    "details": [
+      {
+        "name": "string",
+        "specification": {
+          "grade": "string",
+          "thickness": "string",
+          "width": "string",
+          "length": "string"
+        },
+        "quantity": "number"
+      }
+    ],
+    "deliveryRequirements": "string",
+    "additionalServices": "string",
+    "customProcessingRequests": [
+      {
+        "processingType": "string",
+        "specifications": {
+          "key": "value"
+        }
+      }
+    ]
+  }
+  \`\`\`
+
+  Here is the structure of the Stock Items data you have access to:
+  \`\`\`json
+  {
+    "productId": "int",
+    "specification": {
+      "grade": "string",
+      "diameter": "string",
+      "wallThickness": "string"
+    },
+    "quantityInStock": "int",
+    "unitPrice": "float",
+    "product": {
+      "name": "string",
+      "description": "string",
+      "category": "string"
+    },
+  }
+
+  Your task is to generate a structured Quote object based on this RFQ data. Here are the steps you need to follow:
+
+  1. **Calculate Total Price:**
+    - For each product in the \`details\` array, check the stock availability and unit price from the available inventory data (you can assume that you have access to this inventory data).
+    - Calculate the total price for each product by multiplying the quantity by the unit price.
+    - Sum the prices of all products to get the overall total price.
+    - If there are any custom processing requests, add additional costs based on the type of processing and specifications.
+
+  2. **Create Quote Object:**
+    - Include the following fields in the Quote object:
+      - **customerId**: The ID of the customer.
+      - **rfqId**: The ID of the RFQ.
+      - **totalPrice**: The calculated total price for the quote.
+      - **deliveryOptions**: Derived from the delivery requirements of the RFQ.
+      - **paymentTerms**: Set standard payment terms (e.g., "30 days net").
+      - **validityPeriod**: The period for which the quote is valid (e.g., 30 days from the current date).
+      - **additionalInformation**: Any additional information derived from the RFQ or standard information.
+      - **status**: Set the status of the quote to "draft".
+
+  3. **Format the Quote Object:**
+    - Ensure that the Quote object matches the following JSON structure:
+
+  \`\`\`json
+  {
+    "customerId": "int",
+    "rfqId": "int",
+    "totalPrice": "float",
+    "deliveryOptions": "string",
+    "paymentTerms": "string",
+    "validityPeriod": "DateTime",
+    "additionalInformation": "string",
+    "status": "string"
+  }
+  \`\`\`
+
+  Here is the structured RFQ data for which you need to generate a Quote:
+`;
+
 const runAssistant = async (assistantId: string, assistantThreadId: string | null, assistantInstructions: string, userMessageContent: string): Promise<
 {
   structuredData: any,
@@ -132,5 +227,6 @@ const runAssistant = async (assistantId: string, assistantThreadId: string | nul
 
 export {
   rfqExtractionInstructions,
+  convertRFQToQuoteInstructions,
   runAssistant,
 };

@@ -7,7 +7,7 @@ export interface RFQDetail {
   quantity: number;
 }
 
-export interface rFQDTO {
+export interface RFQDTO {
   customerEmail: string;
   customerName: string;
   contactPerson: string;

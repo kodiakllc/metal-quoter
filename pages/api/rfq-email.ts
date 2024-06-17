@@ -1,8 +1,9 @@
 // /pages/api/rfq-email.ts
 import prisma from "@/lib/prisma-client-edge";
-import { sendRFQToSlack } from '@/utils/server/slack';
+import { sendQuoteToSlack, sendRFQToSlack } from '@/utils/server/slack';
 import { rfqExtractionInstructions, runAssistant } from '@/utils/server/assistant';
-import { getEmailToRFQMessage, createRFQ } from '@/utils/server/rfq';
+import { getEmailToRFQMessage, createRFQ, convertRFQToQuote } from '@/utils/server/rfq';
+import { quoteToQuoteDTO } from '@/utils/server/quote';
 import { findCustomerThreadId } from '@/utils/server/customer';
 
 export const config = {
@@ -25,7 +26,7 @@ const POST = async (req: Request) => {
         recipient,
         subject,
         body,
-        receivedAt: receivedAt || new Date().toISOString(), // Use provided receivedAt or current timestamp
+        receivedAt: receivedAt || new Date().toISOString(),
       },
     });
 
@@ -48,6 +49,13 @@ const POST = async (req: Request) => {
 
     // Send the RFQ data to Slack
     await sendRFQToSlack(rfqData);
+
+    // try to create a quote from the RFQ
+    const { quote, threadId: newThreadId } = await convertRFQToQuote(assistantId, newRFQ);
+    const quoteDTO = await quoteToQuoteDTO(quote);
+
+    // send the quote to slack
+    await sendQuoteToSlack(quoteDTO);
 
     // return the extracted data as a response
     return new Response(JSON.stringify(rfqData), { status: 200, statusText: 'OK' });
