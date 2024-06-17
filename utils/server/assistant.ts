@@ -1,6 +1,5 @@
 // /utils/server/assistant.ts
 import openai from '@/lib/openai';
-import prisma from '@/lib/prisma-client-edge';
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';
 
 const rfqExtractionInstructions = `
@@ -51,7 +50,7 @@ const rfqExtractionInstructions = `
         },
         "quantity": "number"
       }
-    ], (or empty array if no details are specified)
+    ], (or [] if no details are specified)
     "deliveryRequirements": "string",
     "additionalServices": "string",
     "customProcessingRequests": [
@@ -61,23 +60,25 @@ const rfqExtractionInstructions = `
           "key": "value"
         }
       }
-    ] (or empty array if no custom processing requests are specified)
+    ] (or [] if no customProcessingRequests are specified)
   }
   \`\`\`
 
   Make sure to parse the email content carefully and accurately fill out each field based on the provided information. Ensure that the extracted data is structured correctly and follows the specified format.
 
-  Ensure to scour all parts of the email body for any possible details (name, specification, quantity, etc.) and include them in the extracted data.
+  Ensure to scour all parts of the email body for any possible details (name, specification, quantity, etc.) and include them in the extracted data; do not miss any relevant information, and make sure to handle any edge cases that may arise.
+
+  If there are any custom processing requests specified in the email, include them in the \`customProcessingRequests\` array by extrapolating the necessary information from the email content. If there are no custom processing requests, return an empty array ([]) for the \`customProcessingRequests\` field.
 
   Here is the email content:
   `;
 
 const runAssistant = async (assistantId: string, assistantThreadId: string | null, assistantInstructions: string, userMessageContent: string): Promise<
 {
-  rfqData: any,
+  structuredData: any,
   threadId: string,
 }> => {
-  // First use assistantThreadId if it was provided, then check if the customer already has a thread, then create a new thread
+  // First use assistantThreadId if it was provided, otherwise create a new thread
   const threadId = assistantThreadId ?? (await openai.beta.threads.create({})).id;
 
   // Add a message to the thread
@@ -121,7 +122,7 @@ const runAssistant = async (assistantId: string, assistantThreadId: string | nul
 
     // parse the structured data from the assistant message
     return {
-      rfqData: JSON.parse(assistantMessage.content[0].text.value),
+      structuredData: JSON.parse(assistantMessage.content[0].text.value),
       threadId: run.thread_id,
     };
   } else {

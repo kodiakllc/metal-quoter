@@ -35,7 +35,7 @@ const POST = async (req: Request) => {
     // Check if the customer already has a thread, then create a new thread
     const existingThreadId = assistantThreadId ?? (await findCustomerThreadId(email.sender));
     // Run the assistant to extract the RFQ data
-    const { rfqData, threadId } = await runAssistant(assistantId, existingThreadId, rfqExtractionInstructions, rfqExtractionMessage);
+    const { structuredData: rfqData, threadId } = await runAssistant(assistantId, existingThreadId, rfqExtractionInstructions, rfqExtractionMessage);
 
     // create the RFQ in the database
     const newRFQ = await createRFQ(rfqData);
