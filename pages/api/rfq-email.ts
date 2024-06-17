@@ -70,7 +70,7 @@ const assistantInstructions = `
   }
   \`\`\`
 
-  Make sure to parse the email content carefully and accurately fill out each field based on the provided information.
+  Make sure to parse the email content carefully and accurately fill out each field based on the provided information. If and only if the email clearly contains multiple RFQs, you should return an array of the above JSON objects, one for each RFQ.
 
   Here is the email content:
   `
@@ -223,20 +223,42 @@ const handler = async (req: Request) => {
       // parse the structured data from the assistant message
       const rfqData = JSON.parse(assistantMessage.content[0].text.value);
 
-      // create the RFQ in the database
-      const newRFQ = await createRFQ(rfqData);
+      // if it is an array, then it's multiple RFQs, so we create one RFQ per item
+      if (Array.isArray(rfqData)) {
+        const rfqs = await Promise.all(rfqData.map(async (rfq) => {
+          const newRFQ = await createRFQ(rfq);
 
-      // update customer with the thread id
-      await prisma.customer.update({
-        where: { id: newRFQ.customerId },
-        data: { threadId: run.thread_id },
-      });
+          // Send the RFQ data to Slack
+          await sendRFQToSlack(rfq);
 
-      // Send the RFQ data to Slack
-      await sendRFQToSlack(rfqData);
+          // update customer with the thread id
+          await prisma.customer.update({
+            where: { id: newRFQ.customerId },
+            data: { threadId: run.thread_id },
+          });
 
-      // return the extracted data as a response
-      return new Response(JSON.stringify(rfqData), { status: 200, statusText: 'OK' });
+          return newRFQ;
+        }));
+
+        // return the extracted data as a response
+        return new Response(JSON.stringify(rfqs), { status: 200, statusText: 'OK' });
+      } else {
+
+        // create the RFQ in the database
+        const newRFQ = await createRFQ(rfqData);
+
+        // update customer with the thread id
+        await prisma.customer.update({
+          where: { id: newRFQ.customerId },
+          data: { threadId: run.thread_id },
+        });
+
+        // Send the RFQ data to Slack
+        await sendRFQToSlack(rfqData);
+
+        // return the extracted data as a response
+        return new Response(JSON.stringify(rfqData), { status: 200, statusText: 'OK' });
+      }
     } else {
       console.error('Assistant run failed:', run);
       return new Response('Assistant run failed', { status: 500, statusText: ''});
