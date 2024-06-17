@@ -90,10 +90,9 @@ const getEmailToRFQMessage = (sender: string, recipient: string, subject: string
 const findCustomerThreadId = async (customerEmail: string) => {
   const customer = await prisma.customer.findFirst({
     where: { emailAddress: customerEmail },
-    select: { threadId: true },
   });
 
-  return customer?.threadId;
+  return customer?.threadId ?? null;
 }
 
 const sendRFQToSlack = async (rfqData: rFQDTO) => {
@@ -234,7 +233,6 @@ const handler = async (req: Request) => {
       });
 
       // Send the RFQ data to Slack
-
       await sendRFQToSlack(rfqData);
 
       // return the extracted data as a response
