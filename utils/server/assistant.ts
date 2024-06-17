@@ -156,7 +156,15 @@ const rfqExtractionInstructions = `
       - **logicBehindThePrice**: A brief explanation of how the total price was calculated, including any additional costs, and be very specific and detailed, but also concise.
       - **status**: Set the status of the quote to "draft".
 
-  3. **Format the Quote Object:**
+  3. **Handle Stock Availability & Pricing:**
+    - Check the availability of each product in the inventory data.
+    - If the quantity requested exceeds the available stock, provide a message in the additional information field indicating the unavailability of the product and any possible alternatives.
+    - If the product is available, provide the unit price and calculate the total price based on the quantity requested; ensure to include this information in the Quote object.
+    - To calculate the total price, multiply the quantity by the unit price for each product, also considering any custom processing requests, if applicable.
+    - Additionally, you must must think "step by step" and provide a detailed explanation of the logic behind the price calculation.
+    - Finally, it is critical that you are accurate and precise in your calculations and explanations, ensuring that the Quote object is correctly formatted and contains all the necessary information.
+
+  4. **Format the Quote Object:**
     - Ensure that the Quote object matches the following JSON structure:
 
   \`\`\`json

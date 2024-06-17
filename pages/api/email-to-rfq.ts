@@ -27,7 +27,7 @@ const POST = async (req: Request) => {
     });
 
     // Trigger background function to process RFQ and generate quote
-    await fetch(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/api/process-rfq`, {
+    fetch(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/api/process-rfq`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
