@@ -1,9 +1,9 @@
 // /types/dto/rFQDTO.ts
 import { CustomProcessingRequestDTO } from '@/types/dto';
 
-export interface Details {
+export interface RFQDetail {
   name: string;
-  specification: Record<string, string>;
+  specification: Record<string, any>;
   quantity: number;
 }
 
@@ -13,8 +13,8 @@ export interface rFQDTO {
   contactPerson: string;
   phoneNumber: string;
   address: string;
-  details?: Details[];
+  details: RFQDetail[];
   deliveryRequirements: string | null;
   additionalServices: string | null;
-  customProcessingRequests?: CustomProcessingRequestDTO[];
+  customProcessingRequests: CustomProcessingRequestDTO[];
 }

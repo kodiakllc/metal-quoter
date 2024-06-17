@@ -56,7 +56,7 @@ const assistantInstructions = `
         },
         "quantity": "number"
       }
-    ],
+    ], (or empty array if no products are specified)
     "deliveryRequirements": "string",
     "additionalServices": "string",
     "customProcessingRequests": [
@@ -66,7 +66,7 @@ const assistantInstructions = `
           "key": "value"
         }
       }
-    ]
+    ] (or empty array if no custom processing requests are specified)
   }
   \`\`\`
 
@@ -133,16 +133,18 @@ const findOrCreateCustomer = (customerEmail: string, customerName: string, conta
 const createRFQ = async (rfqData: rFQDTO) => {
   const customer = await findOrCreateCustomer(rfqData.customerEmail, rfqData.customerName, rfqData.contactPerson, rfqData.phoneNumber, rfqData.address);
 
-  const details = rfqData.details?.map((detail) => ({
+  const details = rfqData.details.map((detail) => ({
     name: detail.name,
     specification: JSON.stringify(detail.specification),
     quantity: detail.quantity,
   }));
+  console.log(details);
 
   const customProcessingRequests = rfqData.customProcessingRequests?.map((request) => ({
     processingType: request.processingType,
     specifications: JSON.stringify(request.specifications),
   }));
+  console.log(customProcessingRequests);
 
   const rfq = await prisma.rFQ.create({
     data: {
