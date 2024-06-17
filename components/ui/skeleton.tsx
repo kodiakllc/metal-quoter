@@ -1,4 +1,5 @@
-import { cn } from "@/utils"
+// /components/ui/skeleton.tsx
+import { cn } from '@/utils';
 
 function Skeleton({
   className,
