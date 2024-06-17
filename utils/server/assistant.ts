@@ -1,6 +1,5 @@
 // /utils/server/assistant.ts
 import openai from '@/lib/openai';
-import { toRFQDTO } from '@/utils/server/rfq';
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';
 
 const rfqExtractionInstructions = `

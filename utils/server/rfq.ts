@@ -2,9 +2,7 @@
 import prisma from '@/lib/prisma-client-edge';
 import { RFQDTO, RFQDetail } from '@/types/dto';
 import { findCustomerById, findOrCreateCustomer } from '@/utils/server/customer';
-import { Quote, RFQ } from '@prisma/client';
-import { convertRFQToQuoteInstructions, runAssistant } from '@/utils/server/assistant';
-import { s } from 'vitest/dist/env-afee91f0';
+import { RFQ } from '@prisma/client';
 
 const getEmailToRFQMessage = (sender: string, recipient: string, subject: string, body: string) => {
   const message = `The below email contains a request for a quote (RFQ) for various metal products from a metal service center. The structured data will be used to create an RFQ in our system. You know what to do based on the instructions previous instructions provided; do not forget to extract the structured data from the email body EXACTLY as requested.
