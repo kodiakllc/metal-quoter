@@ -7,6 +7,10 @@ import { getEmailToRFQMessage, createRFQ } from '@/utils/server/rfq';
 import { convertRFQToQuote, quoteToQuoteDTO } from '@/utils/server/quote';
 import { findCustomerThreadId } from '@/utils/server/customer';
 
+export const config = {
+  maxDuration: 300,
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
