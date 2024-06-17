@@ -14,7 +14,7 @@ export interface rFQDTO {
   phoneNumber: string;
   address: string;
   details?: Details[];
-  deliveryRequirements?: string;
-  additionalServices?: string;
+  deliveryRequirements: string | null;
+  additionalServices: string | null;
   customProcessingRequests?: CustomProcessingRequestDTO[];
 }
