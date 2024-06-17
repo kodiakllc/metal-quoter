@@ -1,5 +1,6 @@
 // /utils/server/assistant.ts
 import openai from '@/lib/openai';
+import { AssistantOptions } from '@/types/assistant';
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';
 
 const rfqExtractionInstructions = `
@@ -183,7 +184,7 @@ const rfqExtractionInstructions = `
   Here is the structured RFQ data for which you need to generate a Quote:
 `;
 
-const runAssistant = async (assistantId: string, assistantThreadId: string | null, assistantInstructions: string, userMessageContent: string): Promise<
+const runAssistant = async (assistantId: string, assistantThreadId: string | null, assistantInstructions: string, assistantOptions: AssistantOptions, userMessageContent: string): Promise<
 {
   structuredData: any,
   threadId: string,
@@ -200,15 +201,11 @@ const runAssistant = async (assistantId: string, assistantThreadId: string | nul
   let run = await openai.beta.threads.runs.createAndPoll(
     threadId,
     {
-      assistant_id: assistantId,
       // manually override all the parameters for the assistant
-      // using this model for the assistant, since I've had good results with it.
-      model: 'gpt-4-1106-preview',
+      assistant_id: assistantId,
       instructions: assistantInstructions,
       response_format: { type: 'json_object' } as AssistantResponseFormat,
-      // 1.42 and 0.85 paired together I have had excellent deterministic results
-      temperature: 1.42,
-      top_p: 0.85,
+      ...assistantOptions,
     }
   );
 

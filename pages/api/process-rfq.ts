@@ -37,6 +37,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       assistantId,
       existingThreadId,
       rfqExtractionInstructions,
+      {
+        // using this model for the assistant, since I've had good results with it.
+        model: 'gpt-4-1106-preview',
+        // 1.42 and 0.85 paired together I have had excellent deterministic results with disorganized data.
+        temperature: 1.42,
+        top_p: 0.85,
+      },
       rfqExtractionMessage
     );
 

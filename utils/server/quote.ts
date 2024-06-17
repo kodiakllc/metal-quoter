@@ -35,6 +35,12 @@ Promise<{ quote: Quote, threadId: string }> => {
     assistantId,
     null,
     convertRFQToQuoteInstructions,
+    {
+      model: 'gpt-4-1106-preview',
+      // using a lower temperature for more deterministic results
+      temperature: 0.5,
+      top_p: 1,
+    },
     message
   );
 
