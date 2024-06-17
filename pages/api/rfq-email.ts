@@ -211,7 +211,7 @@ const handler = async (req: Request) => {
       );
 
       // Find the last message from the assistant
-      const assistantMessage = messages.data.sort((a, b) => a.created_at - b.created_at).find((message) => message.role === 'assistant');
+      const assistantMessage = messages.data.sort((a, b) => b.created_at - a.created_at).find((message) => message.role === 'assistant');
 
       if (!assistantMessage) {
         throw new Error('No assistant message found.');
