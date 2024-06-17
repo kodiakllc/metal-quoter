@@ -60,13 +60,15 @@ const handler = async (req: Request) => {
       const messages = await openai.beta.threads.messages.list(
         run.thread_id
       );
-      // get the last message, which contains the structured data, and parse it
-      const lastMessage = messages.data[messages.data.length - 1];
-      // ensure the last message is structured data by checking the type
-      if (lastMessage.content[0].type !== 'text') {
+      // since it will be a new thread, the only message with role 'assistant' will be the last one
+      const assistantMessage = messages.data.find((message) => message.role === 'assistant');
+      if (!assistantMessage) {
+        throw new Error('No assistant message found.');
+      }
+      if (assistantMessage.content[0].type !== 'text') {
         throw new Error('Expected structured data in the last message.');
       }
-      const structuredData = JSON.parse(lastMessage.content[0].text.value);
+      const structuredData = JSON.parse(assistantMessage.content[0].text.value);
       return new Response(JSON.stringify(structuredData), { status: 200, statusText: 'OK' });
     } else {
       console.error('Assistant run failed:', run);
