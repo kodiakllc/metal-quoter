@@ -17,4 +17,5 @@ export interface RFQDTO {
   deliveryRequirements: string | null;
   additionalServices: string | null;
   customProcessingRequests: CustomProcessingRequestDTO[];
+  createdAt: string;
 }

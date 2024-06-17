@@ -61,7 +61,8 @@ const rfqExtractionInstructions = `
           "key": "value"
         }
       }
-    ] (or [] if no customProcessingRequests are specified)
+    ], (or [] if no customProcessingRequests are specified)
+    "createdAt": "DateTime"
   }
   \`\`\`
 
@@ -109,7 +110,8 @@ const rfqExtractionInstructions = `
             "key": "value"
           }
         }
-      ]
+      ],
+      "createdAt": "DateTime"
     }
   }
   \`\`\`
@@ -177,7 +179,8 @@ const rfqExtractionInstructions = `
     "validityPeriod": "DateTime",
     "additionalInformation": "string",
     "logicBehindThePrice": "string",
-    "status": "string"
+    "status": "string",
+    "createdAt": "DateTime"
   }
   \`\`\`
 

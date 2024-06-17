@@ -14,4 +14,5 @@ export interface QuoteDTO {
   additionalInformation: string | null;
   logicBehindThePrice: string | null;
   status: string;
+  createdAt: string;
 }

@@ -84,6 +84,7 @@ const quoteToQuoteDTO = async (quote: Quote): Promise<QuoteDTO> => {
     additionalInformation: quote.additionalInformation || '',
     logicBehindThePrice: quote.logicBehindThePrice || '',
     status: quote.status,
+    createdAt: quote.createdAt.toISOString(),
   };
 };
 

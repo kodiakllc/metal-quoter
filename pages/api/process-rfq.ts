@@ -25,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'Email not found' });
     }
 
-    const { sender, recipient, subject, body } = email;
+    const { sender, recipient, subject, body, receivedAt } = email;
 
     // Extract the structured data from the email body
-    const rfqExtractionMessage = getEmailToRFQMessage(sender, recipient, subject ?? '<No Subject>', body);
+    const rfqExtractionMessage = getEmailToRFQMessage(receivedAt, sender, recipient, subject ?? '<No Subject>', body);
 
     // Check if the customer already has a thread, then create a new thread
     const existingThreadId = assistantThreadId ?? (await findCustomerThreadId(email.sender));
@@ -49,6 +49,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Create the RFQ in the database
     const newRFQ = await createRFQ(rfqData);
+
+    // update the email with the processedAt and status
+    await prisma.email.update({
+      where: { id: emailId },
+      data: {
+        processedAt: new Date().toISOString(),
+        proccesingStatus: 'processed',
+      },
+    });
 
     // Update customer with the thread id
     await prisma.customer.update({
