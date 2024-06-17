@@ -47,6 +47,38 @@ export interface Env {
 	// MY_SERVICE: Fetcher;
 }
 
+const slackSuccess = async (sender: string, recipient: string, subject: string, response: any) => {
+  await fetch('https://hooks.slack.com/services/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', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application-json',
+    },
+    body: JSON.stringify({
+      text: `Email successfully processed:\n
+      - Sender: ${sender}\n
+      - Recipient: ${recipient}\n
+      - Subject: ${subject}\n
+      - Structured Data: \`\`\`${JSON.stringify(await response.json())}\`\`\``
+    })
+  });
+}
+
+const slackError = async (sender: string, recipient: string, error: any) => {
+  console.error('Error processing email: ', error.toString());
+  await fetch('https://hooks.slack.com/services/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', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application-json',
+    },
+    body: JSON.stringify({
+      text: `Error processing email:\n
+      - Sender: ${sender}\n
+      - Recipient: ${recipient}\n
+      - Error: ${error.toString()}`
+    })
+  });
+}
+
 export default {
   async email(message: ForwardableEmailMessage, env: Env, ctx: ExecutionContext) {
     // Assuming this Worker is triggered by incoming emails.
@@ -83,26 +115,12 @@ export default {
         throw new Error(`API responded with status ${response.status}`);
       }
 
-      // Optionally, log or process the successful response.
-      // await message.forward("njaunich@kodiakllc.io");
-      // send the response data to slack
-      await fetch('https://hooks.slack.com/services/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', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application-json',
-        },
-        body: JSON.stringify({
-          text: `Email successfully processed:\n
-          - Sender: ${sender}\n
-          - Recipient: ${recipient}\n
-          - Subject: ${email.subject}\n
-          - Structured Data: \`\`\`${JSON.stringify(await response.json())}\`\`\``
-        })
-      });
+      // Notify the Slack channel about the successful email processing.
+      await slackSuccess(sender, recipient, email.subject ?? '[No Subject]', response);
 
     } catch (error: any) {
       console.error('Error processing email:', error.toString());
-      message.setReject('Error processing email');
+      await slackError(sender, recipient, error);
     }
   },
 };

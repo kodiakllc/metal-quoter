@@ -112,8 +112,11 @@ const handler = async (req: Request) => {
       {
         assistant_id: assistantId,
         // manually override all the parameters for the assistant
+        // using this model for the assistant, since I've had good results with it.
+        model: 'gpt-4-1106-preview',
         instructions: assistantInstructions,
-        response_format: 'json_object' as AssistantResponseFormat,
+        response_format: { type: 'json_object' } as AssistantResponseFormat,
+        // 1.42 and 0.85 paired together I have had excellent deterministic results
         temperature: 1.42,
         top_p: 0.85,
       }
