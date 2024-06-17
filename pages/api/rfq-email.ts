@@ -137,19 +137,19 @@ const createRFQ = async (rfqData: rFQDTO) => {
 
   const details = rfqData.details?.map((detail) => ({
     name: detail.name,
-    specification: JSON.stringify(detail.specification),
+    specification: detail.specification,
     quantity: detail.quantity,
   })) ?? [];
 
   const customProcessingRequests = rfqData.customProcessingRequests?.map((request) => ({
     processingType: request.processingType,
-    specifications: JSON.stringify(request.specifications),
+    specifications: request.specifications,
   })) ?? [];
 
   const rfq = await prisma.rFQ.create({
     data: {
       customerId: customer.id,
-      details: JSON.stringify(details),
+      details: details,
       deliveryRequirements: rfqData.deliveryRequirements,
       customProcessingRequests: {
         create: customProcessingRequests,
