@@ -3,7 +3,7 @@
 // Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -23,6 +23,7 @@ model Customer {
   address       String?
   quotes        Quote[] // This indicates that a Customer can have many Quotes
   rfqs          RFQ[]
+  threadId      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -54,7 +55,7 @@ model StockItem {
 model RFQ {
   id                       Int                       @id @default(autoincrement())
   customerId               Int
-  details                  String // Could be a JSON string for structured data
+  details                  Json
   deliveryRequirements     String?
   status                   String                    @default("pending")
   customer                 Customer                  @relation(fields: [customerId], references: [id])

@@ -2,6 +2,7 @@
 import openai from '@/lib/openai';
 import prisma from "@/lib/prisma-client-edge";
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';
+import { rFQDTO } from '@/types/dto';
 
 export const config = {
   runtime: 'edge',
@@ -44,7 +45,7 @@ const assistantInstructions = `
     "contactPerson": "string",
     "phoneNumber": "string",
     "address": "string",
-    "products": [
+    "details": [
       {
         "name": "string",
         "specification": {
@@ -57,7 +58,15 @@ const assistantInstructions = `
       }
     ],
     "deliveryRequirements": "string",
-    "additionalServices": "string"
+    "additionalServices": "string",
+    "customProcessingRequests": [
+      {
+        "processingType": "string",
+        "specifications": {
+          "key": "value"
+        }
+      }
+    ]
   }
   \`\`\`
 
@@ -66,7 +75,7 @@ const assistantInstructions = `
   Here is the email content:
   `
 
-const constructAssistantMessage = (sender: string, recipient: string, subject: string, body: string) => {
+const getEmailToRFQMessage = (sender: string, recipient: string, subject: string, body: string) => {
   const message = `The below email contains a request for a quote (RFQ) for various metal products from a metal service center. The structured data will be used to create an RFQ in our system. You know what to do based on the instructions previous instructions provided; do not forget to extract the structured data from the email body exactly as requested.
 
   The sender of the email is ${sender} and the recipient is ${recipient}. The subject of the email is "${subject}".
@@ -76,6 +85,78 @@ const constructAssistantMessage = (sender: string, recipient: string, subject: s
   `;
 
   return message;
+}
+
+const findCustomerThreadId = async (customerEmail: string) => {
+  const customer = await prisma.customer.findFirst({
+    where: { emailAddress: customerEmail },
+    select: { threadId: true },
+  });
+
+  return customer?.threadId;
+}
+
+const sendRFQToSlack = async (rfqData: rFQDTO) => {
+  await fetch('https://hooks.slack.com/services/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', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application-json',
+    },
+    body: JSON.stringify({
+      text: `RFQ successfully created:\n
+      - Customer Email: ${rfqData.customerEmail}\n
+      - Customer Name: ${rfqData.customerName}\n
+      - Contact Person: ${rfqData.contactPerson}\n
+      - Phone Number: ${rfqData.phoneNumber}\n
+      - Address: ${rfqData.address}\n
+      - Details: \`\`\`${JSON.stringify(rfqData.details)}\`\`\`\n
+      - Delivery Requirements: ${rfqData.deliveryRequirements}\n
+      - Additional Services: ${rfqData.additionalServices}\n
+      - Custom Processing Requests: \`\`\`${JSON.stringify(rfqData.customProcessingRequests)}\`\`\``
+    })
+  });
+}
+
+const findOrCreateCustomer = (customerEmail: string, customerName: string, contactPerson: string, phoneNumber: string, address: string) => {
+  return prisma.customer.upsert({
+    where: { emailAddress: customerEmail },
+    update: {},
+    create: {
+      companyName: customerName,
+      contactPerson,
+      emailAddress: customerEmail,
+      phoneNumber,
+      address,
+    },
+  });
+}
+
+const createRFQ = async (rfqData: rFQDTO) => {
+  const customer = await findOrCreateCustomer(rfqData.customerEmail, rfqData.customerName, rfqData.contactPerson, rfqData.phoneNumber, rfqData.address);
+
+  const details = rfqData.details?.map((detail) => ({
+    name: detail.name,
+    specification: JSON.stringify(detail.specification),
+    quantity: detail.quantity,
+  }));
+
+  const customProcessingRequests = rfqData.customProcessingRequests?.map((request) => ({
+    processingType: request.processingType,
+    specifications: JSON.stringify(request.specifications),
+  }));
+
+  const rfq = await prisma.rFQ.create({
+    data: {
+      customerId: customer.id,
+      details: JSON.stringify(details),
+      deliveryRequirements: rfqData.deliveryRequirements,
+      customProcessingRequests: {
+        create: customProcessingRequests,
+      },
+    },
+  });
+
+  return rfq;
 }
 
 const handler = async (req: Request) => {
@@ -98,13 +179,13 @@ const handler = async (req: Request) => {
       },
     });
 
-    // Create a thread if needed
-    const threadId = assistantThreadId ?? (await openai.beta.threads.create({})).id;
+    // First use assistantThreadId if it was provided, then check if the customer already has a thread, then create a new thread
+    const threadId = assistantThreadId ?? (await findCustomerThreadId(email.sender)) ?? (await openai.beta.threads.create({})).id;
 
     // Add a message to the thread
-    const createdMessage = await openai.beta.threads.messages.create(threadId, {
+    await openai.beta.threads.messages.create(threadId, {
       role: 'user',
-      content: constructAssistantMessage(email.sender, email.recipient, email.subject ?? '', email.body),
+      content: getEmailToRFQMessage(email.sender, email.recipient, email.subject ?? '', email.body),
     });
 
     let run = await openai.beta.threads.runs.createAndPoll(
@@ -127,16 +208,37 @@ const handler = async (req: Request) => {
       const messages = await openai.beta.threads.messages.list(
         run.thread_id
       );
-      // since it will be a new thread, the only message with role 'assistant' will be the last one
-      const assistantMessage = messages.data.find((message) => message.role === 'assistant');
+
+      // Find the last message from the assistant
+      const assistantMessage = messages.data.sort((a, b) => a.created_at - b.created_at).find((message) => message.role === 'assistant');
+
       if (!assistantMessage) {
         throw new Error('No assistant message found.');
       }
+
+      // validate that the assistant message contains structured data
       if (assistantMessage.content[0].type !== 'text') {
         throw new Error('Expected structured data in the last message.');
       }
-      const structuredData = JSON.parse(assistantMessage.content[0].text.value);
-      return new Response(JSON.stringify(structuredData), { status: 200, statusText: 'OK' });
+
+      // parse the structured data from the assistant message
+      const rfqData = JSON.parse(assistantMessage.content[0].text.value);
+
+      // create the RFQ in the database
+      const newRFQ = await createRFQ(rfqData);
+
+      // update customer with the thread id
+      await prisma.customer.update({
+        where: { id: newRFQ.customerId },
+        data: { threadId: run.thread_id },
+      });
+
+      // Send the RFQ data to Slack
+
+      await sendRFQToSlack(rfqData);
+
+      // return the extracted data as a response
+      return new Response(JSON.stringify(rfqData), { status: 200, statusText: 'OK' });
     } else {
       console.error('Assistant run failed:', run);
       return new Response('Assistant run failed', { status: 500, statusText: ''});

@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "test": "vitest",
     "coverage": "vitest run --coverage",
+    "prisma:format": "dotenv -e .env.local -- prisma format",
     "prisma:deploy": "dotenv -e .env.local -- prisma migrate deploy",
     "prisma:push": "dotenv -e .env.local -- prisma db push",
     "prisma:generate": "dotenv -e .env.local -- prisma generate",

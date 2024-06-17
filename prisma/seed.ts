@@ -49,7 +49,18 @@ async function main() {
   const rfq = await prisma.rFQ.create({
     data: {
       customerId: customer.id,
-      details: 'Request for 20 Aluminum Coils, alloy 5052, thickness 0.5mm.',
+      details: JSON.stringify([
+        {
+          name: 'Aluminum Coil',
+          specification: {
+            grade: '5052',
+            thickness: '0.5mm',
+            width: '1500mm',
+            length: '2000mm',
+          },
+          quantity: 20,
+        },
+      ]),
       deliveryRequirements: 'Deliver to Springfield by 2023-12-25',
       status: 'pending',
       customProcessingRequests: {
