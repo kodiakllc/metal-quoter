@@ -54,11 +54,11 @@ const slackSuccess = async (sender: string, recipient: string, subject: string, 
       'Content-Type': 'application-json',
     },
     body: JSON.stringify({
-      text: `Email successfully processed:\n
+      text: `Email processing initiated:\n
       - Sender: ${sender}\n
       - Recipient: ${recipient}\n
       - Subject: ${subject}\n
-      - Structured Data: \`\`\`${JSON.stringify(await response.json())}\`\`\``
+      - Response: \`\`\`${JSON.stringify(await response.json())}\`\`\``
     })
   });
 }
