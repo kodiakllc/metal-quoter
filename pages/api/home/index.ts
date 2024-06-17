@@ -1,2 +1,2 @@
-// pages/api/home/index.ts
+// /pages/api/home/index.ts
 export { default, getServerSideProps } from './home';

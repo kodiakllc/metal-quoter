@@ -1,4 +1,4 @@
-// pages/api/products/products.tsx
+// /pages/api/products/products.tsx
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 

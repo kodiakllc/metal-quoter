@@ -1,4 +1,4 @@
-// lib/utils.ts
+// /lib/utils.ts
 import ms from 'ms'
 
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {

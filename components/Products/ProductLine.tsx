@@ -1,4 +1,4 @@
-// components/Products/ProductLine.tsx
+// /components/Products/ProductLine.tsx
 import { MoreHorizontal } from 'lucide-react';
 
 import Image from 'next/image';

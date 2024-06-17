@@ -1,4 +1,4 @@
-// pages/api/rfq-email.ts
+// /pages/api/rfq-email.ts
 import openai from '@/lib/openai';
 import prisma from "@/lib/prisma-client-edge";
 import { AssistantResponseFormat } from 'openai/resources/beta/threads/threads';

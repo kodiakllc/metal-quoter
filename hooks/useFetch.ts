@@ -1,3 +1,4 @@
+// /hooks/useFetch.ts
 export type RequestModel = {
   params?: object;
   headers?: object;

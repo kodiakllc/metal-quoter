@@ -1,4 +1,4 @@
-// pages/api/home/home.context.tsx
+// /pages/api/home/home.context.tsx
 import { Dispatch, createContext } from 'react';
 
 import { ActionType } from '@/hooks/useCreateReducer';

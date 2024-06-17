@@ -1,3 +1,4 @@
+// /types/dto/ProductDTO.ts
 export interface ProductDTO {
   id: number;
   name: string;

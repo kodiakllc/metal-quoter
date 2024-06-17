@@ -1,4 +1,4 @@
-// components/Header.tsx
+// /components/Header.tsx
 import { File, ListFilter, PlusCircle, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import React from 'react';

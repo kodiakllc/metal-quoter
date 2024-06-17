@@ -1,4 +1,4 @@
-// pages/_app.tsx
+// /pages/_app.tsx
 import { Analytics } from '@vercel/analytics/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';

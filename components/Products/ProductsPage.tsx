@@ -1,4 +1,4 @@
-// components/Products/ProductsPage.tsx
+// /components/Products/ProductsPage.tsx
 import { ProductDTO } from '@/types/dto/ProductDTO';
 
 import Header from '@/components/Header';

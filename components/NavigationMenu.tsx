@@ -1,4 +1,4 @@
-// components/NavigationMenu.tsx
+// /components/NavigationMenu.tsx
 import {
   Home,
   LineChart,
