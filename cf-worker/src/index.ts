@@ -99,11 +99,11 @@ export default {
       assistantThreadId: null,
     };
 
-    // Define the endpoint URL for your `rfq-email.ts` API.
-    const apiEndpoint = 'https://mq.kdk.dev/api/rfq-email';
+    // Define the endpoint URL for your `email-to-rfq.ts` API.
+    const apiEndpoint = 'https://mq.kdk.dev/api/email-to-rfq';
 
     try {
-      // Attempt to forward the email content to your `rfq-email.ts` API.
+      // Attempt to forward the email content to your `email-to-rfq.ts` API.
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
