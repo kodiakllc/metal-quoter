@@ -92,7 +92,11 @@ export default {
           'Content-Type': 'application-json',
         },
         body: JSON.stringify({
-          text: `Email successfully processed: \`\`\`${JSON.stringify(response)}\`\`\``
+          text: `Email successfully processed:\n
+          - Sender: ${sender}\n
+          - Recipient: ${recipient}\n
+          - Subject: ${email.subject}\n
+          - Structured Data: \`\`\`${JSON.stringify(await response.json())}\`\`\``
         })
       });
 
