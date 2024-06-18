@@ -29,6 +29,7 @@ export const generateBreadcrumbs = (path: string, query: ParsedUrlQuery): MQBrea
     const href = `${acc}/${curr}`;
     // Ensure label is a string. If it's an array, take the first value
     const label = capitalizeAndClean(
+      //@ts-ignore
       Array.isArray(query[curr]) ? query[curr][0] : query[curr] || curr
     );
     if (label) {
