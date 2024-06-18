@@ -31,9 +31,9 @@ const handlePost = async (req: Request) => {
 
   switch (action) {
     case 'approve':
-      return changeQuoteStatus(quoteId, 'approved');
+      return await changeQuoteStatus(quoteId, 'approved');
     case 'unapprove':
-      return changeQuoteStatus(quoteId, 'draft');
+      return await changeQuoteStatus(quoteId, 'draft');
     default:
       return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400 });
   }
