@@ -1,19 +1,12 @@
 // /components/Products/ProductTable.tsx
 import {
+  ChevronLeft,
+  ChevronRight,
   File,
-  Home,
-  LineChart,
   ListFilter,
-  MoreHorizontal,
-  Package,
-  Package2,
-  PanelLeft,
   PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Users2,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 import { ProductDTO } from '@/types/dto/ProductDTO';
 
@@ -30,11 +23,15 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -51,6 +48,24 @@ interface ProductTableProps {
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(products.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -129,7 +144,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {products.map((product) => (
+                  {currentProducts.map((product) => (
                     <ProductLine
                       key={product.id}
                       name={product.name}
@@ -142,11 +157,46 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                 </TableBody>
               </Table>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-row items-center justify-between border-t bg-muted/50 px-6 py-3">
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{Math.min(products.length, 10)}</strong> of{' '}
-                <strong>{products.length}</strong> products
+                Showing{' '}
+                <strong>
+                  {startIndex + 1}-
+                  {Math.min(products.length, startIndex + itemsPerPage)}
+                </strong>{' '}
+                of <strong>{products.length}</strong> products
               </div>
+              <Pagination className="ml-auto mr-0 w-auto">
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-6 w-6"
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                      <span className="sr-only">Previous Page</span>
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-6 w-6"
+                      onClick={handleNextPage}
+                      disabled={
+                        currentPage ===
+                        Math.ceil(products.length / itemsPerPage)
+                      }
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                      <span className="sr-only">Next Page</span>
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </CardFooter>
           </Card>
         </TabsContent>

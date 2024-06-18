@@ -1,19 +1,12 @@
 // /components/StockItems/StockItemTable.tsx
 import {
+  ChevronLeft,
+  ChevronRight,
   File,
-  Home,
-  LineChart,
   ListFilter,
-  MoreHorizontal,
-  Package,
-  Package2,
-  PanelLeft,
   PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Users2,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 import { StockItemDTO } from '@/types/dto';
 
@@ -30,11 +23,15 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -51,7 +48,26 @@ interface StockItemTableProps {
 }
 
 const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
-  const maxItemsToShow = 5;
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentStockItems = stockItems.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(stockItems.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -127,7 +143,7 @@ const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stockItems.slice(0, maxItemsToShow).map((stockItem) => (
+                  {currentStockItems.map((stockItem) => (
                     <StockItemLine
                       key={stockItem.id}
                       specification={stockItem.specification}
@@ -141,11 +157,46 @@ const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
                 </TableBody>
               </Table>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-row items-center justify-between border-t bg-muted/50 px-6 py-3">
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{Math.min(stockItems.length, maxItemsToShow)}</strong> of{' '}
-                <strong>{stockItems.length}</strong> stock items
+                Showing{' '}
+                <strong>
+                  {startIndex + 1}-
+                  {Math.min(stockItems.length, startIndex + itemsPerPage)}
+                </strong>{' '}
+                of <strong>{stockItems.length}</strong> stock items
               </div>
+              <Pagination className="ml-auto mr-0 w-auto">
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-6 w-6"
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                      <span className="sr-only">Previous Page</span>
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-6 w-6"
+                      onClick={handleNextPage}
+                      disabled={
+                        currentPage ===
+                        Math.ceil(stockItems.length / itemsPerPage)
+                      }
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                      <span className="sr-only">Next Page</span>
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </CardFooter>
           </Card>
         </TabsContent>
