@@ -4,7 +4,7 @@ import { QuoteDTO, RFQDTO, RFQQuote } from '@/types/dto';
 import { findCustomerById } from '@/utils/server/customer';
 import { Quote, RFQ } from '@prisma/client';
 import { toRFQDTO } from '@/utils/server/rfq';
-import { convertRFQToQuoteInstructions, runAssistant } from '@/utils/server/assistant';
+import { convertRFQToQuoteInstructions, validatePotentialQuoteInstructions, runAssistant } from '@/utils/server/assistant';
 
 const convertRFQToQuote = async (assistantId: string, rfq: RFQ):
 Promise<{ quote: Quote, threadId: string }> => {
@@ -44,9 +44,23 @@ Promise<{ quote: Quote, threadId: string }> => {
     message
   );
 
+  // we loop the structured data back into the assistant again with the validatePotentialQuoteInstructions
+  // to get the assistant to validate the quote data
+  const { structuredData: quoteData2, threadId: validationThreadId } = await runAssistant(
+    assistantId,
+    threadId,
+    validatePotentialQuoteInstructions,
+    {
+      model: 'gpt-4-1106-preview',
+      temperature: 0.5,
+      top_p: 1,
+    },
+    `The initial message is: \n\n` + message + `\n\n The quote data to validate is as follows: \n\n ${JSON.stringify(quoteData)}`
+  );
+
   const quote = await prisma.quote.create({
     data: {
-      ...quoteData,
+      ...quoteData2,
       rfqId: rfq.id,
       customerId: rfq.customerId,
     },
