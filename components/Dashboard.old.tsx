@@ -1,3 +1,4 @@
+// /components/Dashboard.old.tsx
 import {
   ChevronLeft,
   ChevronRight,
