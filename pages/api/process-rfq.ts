@@ -75,6 +75,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Send the quote to Slack
     await sendQuoteToSlack(quoteDTO);
 
+    // update the rfq as processed
+    await prisma.rFQ.update({
+      where: { id: newRFQ.id },
+      data: {
+        status: 'processed',
+        updatedAt: new Date().toISOString()
+      },
+    });
+
     return res.status(200).json({ message: 'RFQ and Quote processed successfully' });
   } catch (error) {
     console.error(error);

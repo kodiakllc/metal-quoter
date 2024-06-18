@@ -71,6 +71,7 @@ const toQuoteDTO = async (quote: Quote): Promise<QuoteDTO> => {
   }
 
   return {
+    id: quote.id,
     customerEmail: customer.emailAddress,
     customerName: customer.companyName || '',
     contactPerson: customer.contactPerson || '',

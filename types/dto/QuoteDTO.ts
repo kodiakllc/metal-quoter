@@ -2,6 +2,7 @@
 import { RFQDTO } from "@/types/dto";
 
 export interface QuoteDTO {
+  id: number;
   customerEmail: string;
   customerName: string;
   contactPerson: string;

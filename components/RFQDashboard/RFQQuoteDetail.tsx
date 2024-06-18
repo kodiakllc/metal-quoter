@@ -1,19 +1,17 @@
 // /components/RFQDashboard/RFQQuoteDetail.tsx
 import {
+  Ban,
   ChevronLeft,
   ChevronRight,
   CircleCheckBig,
   Copy,
-  CreditCard,
-  MoreHorizontal,
   MoreVertical,
   Send,
 } from 'lucide-react';
 import React, { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
-import Image from 'next/image';
+import { approveQuote, unapproveQuote } from '@/utils/app/api';
 
 import { QuoteDTO, RFQDTO } from '@/types/dto';
 
@@ -31,7 +29,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -45,14 +42,45 @@ import { Separator } from '@/components/ui/separator';
 interface RFQQuoteDetailProps {
   rfq: RFQDTO;
   quote?: QuoteDTO;
+  updateRFQ: (rfq: RFQDTO) => void;
+  updateQuote: (quote: QuoteDTO) => void;
 }
 
-const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({ rfq, quote }) => {
+const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({
+  rfq,
+  quote,
+  updateRFQ,
+  updateQuote,
+}) => {
   useEffect(() => {
     if (!quote) {
       toast.error('Quote data is missing');
     }
   }, [quote]);
+
+  const handleQuoteStatusChange = async (status: 'approved' | 'unapproved') => {
+    if (!quote) return;
+
+    try {
+      if (status === 'approved') {
+        await approveQuote(quote.id);
+        toast.success('Quote approved successfully');
+        // refresh the quote status or update state here:
+        updateQuote({ ...quote, status: 'approved' });
+      } else if (status === 'unapproved') {
+        await unapproveQuote(quote.id);
+        toast.success('Quote unapproved successfully');
+        // refresh the quote status or update state here:
+        updateQuote({ ...quote, status: 'draft' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An error occurred while approving the quote');
+      }
+    }
+  };
 
   return (
     <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
@@ -88,13 +116,33 @@ const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({ rfq, quote }) => {
           </CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <CircleCheckBig className="h-3.5 w-3.5" />
-            <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-              Approve Quote
-            </span>
-          </Button>
-          {/* send the quote to the customer */}
+          {quote?.status === 'draft' && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 gap-1 hover:bg-green-700"
+              onClick={() => handleQuoteStatusChange('approved')}
+            >
+              <CircleCheckBig className="h-3.5 w-3.5" />
+              <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                Approve Quote
+              </span>
+            </Button>
+          )}
+          {/* below we have an unapprove button */}
+          {quote?.status === 'approved' && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 gap-1 hover:bg-red-700"
+              onClick={() => handleQuoteStatusChange('unapproved')}
+            >
+              <Ban className="h-3.5 w-3.5" />
+              <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                Unapprove Quote
+              </span>
+            </Button>
+          )}
           <Button size="sm" variant="outline" className="h-8 gap-1">
             <Send className="h-3.5 w-3.5" />
             <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
@@ -192,8 +240,6 @@ const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({ rfq, quote }) => {
                 <span className="text-muted-foreground">
                   Additional Information
                 </span>
-                {/* we want the items to be right aligned */}
-                {/* <span>{quote.additionalInformation}</span> */}
                 <span className="text-right">
                   {quote.additionalInformation}
                 </span>
@@ -206,8 +252,12 @@ const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({ rfq, quote }) => {
               </li>
               <li className="flex items-center justify-between font-semibold">
                 <span className="text-muted-foreground">Status</span>
-                {/* <span className="text-right">{quote.status}</span> */}
-                <Badge>{quote.status}</Badge>
+                <Badge
+                  className={quote.status === 'approved' ? 'bg-green-700' : ''}
+                  variant="outline"
+                >
+                  {quote.status}
+                </Badge>
               </li>
             </ul>
           </div>

@@ -1,42 +1,50 @@
 // /components/RFQDashboard/RFQDashboard.tsx
-import { ChevronLeft, ChevronRight, Copy, CreditCard, File, Home, LineChart, ListFilter, MoreVertical, Package, Package2, PanelLeft, Search, Settings, ShoppingCart, Truck, Users2 } from 'lucide-react';
+import { File, ListFilter } from 'lucide-react';
 import React, { useState } from 'react';
 
-
-
-import Image from 'next/image';
-import Link from 'next/link';
-
-
-
-import { RFQQuote } from '@/types/dto';
-
-
+import { QuoteDTO, RFQDTO, RFQQuote } from '@/types/dto';
 
 import { Badge } from '@/components/ui/badge';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-
 
 import RFQQuoteDetail from './RFQQuoteDetail';
-
 
 interface RFQDashboardProps {
   rfqsAndQuotes: RFQQuote[];
 }
 
-const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
+const RFQDashboard: React.FC<RFQDashboardProps> = ({
+  rfqsAndQuotes: initialRfqsAndQuotes,
+}) => {
+  const [rfqsAndQuotes, setRFQsAndQuotes] =
+    useState<RFQQuote[]>(initialRfqsAndQuotes);
   const [selectedRFQIndex, setSelectedRFQIndex] = useState(0);
   const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(0);
 
@@ -47,6 +55,18 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
 
   const handleQuoteChange = (quoteIndex: number) => {
     setSelectedQuoteIndex(quoteIndex);
+  };
+
+  const handleRFQUpdate = (rfq: RFQDTO) => {
+    const updatedRFQsAndQuotes = [...rfqsAndQuotes];
+    updatedRFQsAndQuotes[selectedRFQIndex].rfq = rfq;
+    setRFQsAndQuotes(updatedRFQsAndQuotes);
+  };
+
+  const handleQuoteUpdate = (quote: QuoteDTO) => {
+    const updatedRFQsAndQuotes = [...rfqsAndQuotes];
+    updatedRFQsAndQuotes[selectedRFQIndex].quotes[selectedQuoteIndex] = quote;
+    setRFQsAndQuotes(updatedRFQsAndQuotes);
   };
 
   const selectedRFQ =
@@ -256,7 +276,12 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <RFQQuoteDetail rfq={selectedRFQ} quote={selectedQuote} />
+            <RFQQuoteDetail
+              rfq={selectedRFQ}
+              quote={selectedQuote}
+              updateRFQ={handleRFQUpdate}
+              updateQuote={handleQuoteUpdate}
+            />
           </>
         ) : (
           <>
