@@ -42,15 +42,21 @@ const handlePost = async (req: Request) => {
 const changeQuoteStatus = async (quoteId: number, status: string) => {
   try {
     // Approve the quote in the database using Prisma
-    const quote = await prisma.quote.update({
-      where: { id: quoteId },
-      data: { status: status },
-    });
-
-    // Return a success response
-    return new Response(JSON.stringify({ message: 'Quote status changed', quote }), {
-      status: 200,
-      statusText: 'OK',
+    // do it as a transaction
+    await prisma.$transaction([
+      prisma.quote.update({
+        where: { id: quoteId },
+        data: { status },
+      }),
+    ]).then((quote) => {
+      // Return a success response
+      return new Response(JSON.stringify({ message: 'Quote status changed', quote }), {
+        status: 200,
+        statusText: 'OK',
+      });
+    }).catch((error) => {
+      // Return an error response
+      return new Response('Error: ' + error?.toString(), { status: 500, statusText: '' });
     });
   } catch (error) {
     console.error(error);
