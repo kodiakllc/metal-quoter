@@ -144,7 +144,8 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
             </CardContent>
             <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-10</strong> of <strong>32</strong> products
+                Showing <strong>1-{Math.min(products.length, 10)}</strong> of{' '}
+                <strong>{products.length}</strong> products
               </div>
             </CardFooter>
           </Card>
