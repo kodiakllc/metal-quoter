@@ -51,6 +51,8 @@ interface StockItemTableProps {
 }
 
 const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
+  const maxItemsToShow = 5;
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -125,7 +127,7 @@ const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stockItems.map((stockItem) => (
+                  {stockItems.slice(0, maxItemsToShow).map((stockItem) => (
                     <StockItemLine
                       key={stockItem.id}
                       specification={stockItem.specification}
@@ -141,7 +143,7 @@ const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
             </CardContent>
             <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{Math.min(stockItems.length, 10)}</strong> of{' '}
+                Showing <strong>1-{Math.min(stockItems.length, maxItemsToShow)}</strong> of{' '}
                 <strong>{stockItems.length}</strong> stock items
               </div>
             </CardFooter>

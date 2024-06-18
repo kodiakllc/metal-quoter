@@ -14,11 +14,10 @@ const NavigationMenu = () => {
   const router = useRouter(); // Use the useRouter hook to get the current route
 
   const navItems = [
-    { href: '/', icon: Home, label: 'Dashboard' },
-    { href: '/rfqs', icon: Quote, label: 'RFQs' },
+    { href: '/', icon: Home, label: 'RFQ Dashboard' },
+    { href: '/quotes', icon: Quote, label: 'Quotes' },
     { href: '/products', icon: Package, label: 'Products' },
     { href: '/stock-items', icon: Puzzle, label: 'Stock Items' },
-    // ... (any other nav items)
   ];
 
   // Function to determine if the item is the currently selected one based on the route
