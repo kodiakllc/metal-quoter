@@ -1,67 +1,46 @@
 // /pages/api/quotes.ts
-import prisma from '@/lib/prisma-client-edge';
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '@/lib/prisma-client';
 
-export const config = {
-  runtime: 'edge',
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 
-const handler = async (req: Request) => {
   try {
-    const { method } = req;
+    const { action, quoteId } = req.body;
 
-    switch (method) {
-      case 'POST':
-        return await handlePost(req);
-      // Additional cases for other methods (GET, PUT, DELETE) can be added here
+    if (!action || !quoteId) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    switch (action) {
+      case 'approve':
+        return changeQuoteStatus(quoteId, 'approved', res);
+      case 'unapprove':
+        return changeQuoteStatus(quoteId, 'unapproved', res);
       default:
-        return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+        return res.status(400).json({ error: 'Invalid action' });
     }
   } catch (error) {
     console.error(error);
-    return new Response('Error: ' + error?.toString(), { status: 500, statusText: '' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-};
+}
 
-const handlePost = async (req: Request) => {
-  const { action, quoteId } = await req.json();
-
-  if (!action || !quoteId) {
-    return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
-  }
-
-  switch (action) {
-    case 'approve':
-      return await changeQuoteStatus(quoteId, 'approved');
-    case 'unapprove':
-      return await changeQuoteStatus(quoteId, 'draft');
-    default:
-      return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400 });
-  }
-};
-
-const changeQuoteStatus = async (quoteId: number, status: string) => {
+const changeQuoteStatus = async (quoteId: number, status: string, res: NextApiResponse) => {
   try {
     // Approve the quote in the database using Prisma
-    // do it as a transaction
-    await prisma.$transaction([
-      prisma.quote.update({
-        where: { id: quoteId },
-        data: { status },
-      }),
-    ]).then((quote) => {
-      // Return a success response
-      return new Response(JSON.stringify({ message: 'Quote status changed', quote }), {
-        status: 200,
-        statusText: 'OK',
-      });
-    }).catch((error) => {
-      // Return an error response
-      return new Response('Error: ' + error?.toString(), { status: 500, statusText: '' });
+    const quote = await prisma.quote.update({
+      where: { id: quoteId },
+      data: { status: status },
     });
+
+    // Return a success response
+    return res.status(200).json({ message: `Quote status changed to ${status}`, quote });
   } catch (error) {
     console.error(error);
-    return new Response('Error: ' + error?.toString(), { status: 500, statusText: '' });
+    return res.status(500).json({ error: `Failed to change quote status to ${status}` });
   }
 };
-
-export default handler;
