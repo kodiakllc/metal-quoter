@@ -7,7 +7,6 @@ npx repo-to-pdf ../../components/ && \
     npx repo-to-pdf ../../pages/ && \
     npx repo-to-pdf ../../prisma/ && \
     npx repo-to-pdf ../../public/ && \
-    npx repo-to-pdf ../../scripts/ && \
     npx repo-to-pdf ../../styles/ && \
     npx repo-to-pdf ../../types/ && \
     npx repo-to-pdf ../../utils/
