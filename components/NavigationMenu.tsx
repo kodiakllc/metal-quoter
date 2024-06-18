@@ -1,5 +1,5 @@
 // /components/NavigationMenu.tsx
-import { Cloud, Home, Package, Puzzle, Quote } from 'lucide-react';
+import { Cloud, Package, Puzzle, Quote } from 'lucide-react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,8 +14,7 @@ const NavigationMenu = () => {
   const router = useRouter(); // Use the useRouter hook to get the current route
 
   const navItems = [
-    { href: '/', icon: Home, label: 'RFQ Dashboard' },
-    { href: '/quotes', icon: Quote, label: 'Quotes' },
+    { href: '/', icon: Quote, label: 'RFQ Dashboard' },
     { href: '/products', icon: Package, label: 'Products' },
     { href: '/stock-items', icon: Puzzle, label: 'Stock Items' },
   ];

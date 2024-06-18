@@ -18,6 +18,7 @@ import {
   Truck,
   Users2,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -83,11 +84,30 @@ interface RFQDashboardProps {
 }
 
 const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
+  const [selectedRFQIndex, setSelectedRFQIndex] = useState(0);
+  const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(0);
+
+  const handleRFQClick = (rfqIndex: number) => {
+    setSelectedRFQIndex(rfqIndex);
+    setSelectedQuoteIndex(0); // Reset to the first quote when selecting a new RFQ
+  };
+
+  const handleQuoteChange = (quoteIndex: number) => {
+    setSelectedQuoteIndex(quoteIndex);
+  };
+
+  const selectedRFQ = rfqsAndQuotes[selectedRFQIndex].rfq;
+  const selectedQuote =
+    rfqsAndQuotes[selectedRFQIndex].quotes[selectedQuoteIndex];
+
+  const todoCardsEnabled = false;
+  const todoDivEnabled = false;
+
   return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-      <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-          <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+      <div className="grid auto-rows-max items-start gap-4 md:gap-8">
+        {todoDivEnabled && (<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+          {todoCardsEnabled && (<Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
             <CardHeader className="pb-3">
               <CardTitle>Your RFQs</CardTitle>
               <CardDescription className="max-w-lg text-balance leading-relaxed">
@@ -98,8 +118,8 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
             <CardFooter>
               <Button>Create New RFQ</Button>
             </CardFooter>
-          </Card>
-          <Card x-chunk="dashboard-05-chunk-1">
+          </Card>)}
+          {todoCardsEnabled && (<Card x-chunk="dashboard-05-chunk-1">
             <CardHeader className="pb-2">
               <CardDescription>This Week</CardDescription>
               <CardTitle className="text-4xl">$1,329</CardTitle>
@@ -112,8 +132,8 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
             <CardFooter>
               <Progress value={25} aria-label="25% increase" />
             </CardFooter>
-          </Card>
-          <Card x-chunk="dashboard-05-chunk-2">
+          </Card>)}
+          {todoCardsEnabled && (<Card x-chunk="dashboard-05-chunk-2">
             <CardHeader className="pb-2">
               <CardDescription>This Month</CardDescription>
               <CardTitle className="text-4xl">$5,329</CardTitle>
@@ -126,8 +146,8 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
             <CardFooter>
               <Progress value={12} aria-label="12% increase" />
             </CardFooter>
-          </Card>
-        </div>
+          </Card>)}
+        </div>)}
         <Tabs defaultValue="week">
           <div className="flex items-center">
             <TabsList>
@@ -187,106 +207,52 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow className="bg-accent">
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          noah@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Subscription
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-25
-                      </TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
+                    {rfqsAndQuotes.map((rfqQuote, rfqIndex) => (
+                      <TableRow
+                        key={rfqIndex}
+                        onClick={() => handleRFQClick(rfqIndex)}
+                        className={`${
+                          rfqIndex === selectedRFQIndex ? 'bg-accent' : ''
+                        } cursor-pointer`}
+                      >
+                        <TableCell>
+                          <div className="font-medium">
+                            {rfqQuote.rfq.customerName.length > 0
+                              ? rfqQuote.rfq.customerName
+                              : rfqQuote.rfq.contactPerson}
+                          </div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            {rfqQuote.rfq.customerEmail}
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {rfqQuote.rfq.details
+                            .map((detail) => detail.name)
+                            .join(', ')}
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Badge className="text-xs" variant="secondary">
+                            {rfqQuote.rfq.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          {new Date(
+                            rfqQuote.rfq.createdAt,
+                          ).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {rfqQuote.quotes.length > 0
+                            ? rfqQuote.quotes[0].totalPrice.toLocaleString(
+                                'en-US',
+                                {
+                                  style: 'currency',
+                                  currency: 'USD',
+                                },
+                              )
+                            : '-'}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -294,11 +260,33 @@ const RFQDashboard: React.FC<RFQDashboardProps> = ({ rfqsAndQuotes }) => {
           </TabsContent>
         </Tabs>
       </div>
-      <div>
-        <RFQQuoteDetail
-          rfq={rfqsAndQuotes[0].rfq}
-          quote={rfqsAndQuotes[0].quotes[0]}
-        />
+      <div className="flex flex-col w-full">
+        <div className="mb-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline" className="w-full">
+                Select Quote
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {rfqsAndQuotes[selectedRFQIndex].quotes.map(
+                (quote, quoteIndex) => (
+                  <DropdownMenuItem
+                    key={quoteIndex}
+                    onClick={() => handleQuoteChange(quoteIndex)}
+                  >
+                    Quote {quoteIndex + 1} -{' '}
+                    {quote.totalPrice.toLocaleString('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </DropdownMenuItem>
+                ),
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <RFQQuoteDetail rfq={selectedRFQ} quote={selectedQuote} />
       </div>
     </main>
   );

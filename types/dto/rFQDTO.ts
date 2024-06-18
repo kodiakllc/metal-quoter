@@ -16,6 +16,7 @@ export interface RFQDTO {
   address: string;
   details: RFQDetail[];
   deliveryRequirements: string | null;
+  status: string;
   additionalServices: string | null;
   customProcessingRequests: CustomProcessingRequestDTO[];
   quotes: QuoteDTO[] | null;

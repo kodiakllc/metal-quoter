@@ -44,6 +44,7 @@ const toRFQDTO = async (rfq: RFQ): Promise<RFQDTO> => {
     address: customer.address || '',
     details: details,
     deliveryRequirements: rfq.deliveryRequirements || '',
+    status: rfq.status,
     additionalServices: rfq.additionalServices || '',
     customProcessingRequests: customProcessingRequests.map((request) => ({
       processingType: request.processingType,

@@ -69,26 +69,25 @@ body {
   background-color: var(--background);
 }
 
+/* Custom Toastify Styles */
 .Toastify__progress-bar--MetalQuoter {
   height: 6px; /* or any height you prefer */
-  background: linear-gradient(to right, #00abd2 0%, #66CCE4 100%);
+  background: linear-gradient(to right, rgb(234, 88, 12) 0%, rgb(228, 123, 67) 100%);
 }
 
 /* Custom toast container background color */
 .Toastify__toast--MetalQuoter {
-  background-color: #696D6D !important; /* Using !important to override default styles */
-  color: #FFFFFF !important;
-  border-radius: 10px !important;
+  background-color: #000000 !important; /* Using !important to override default styles */
+  color: var(--primary-foreground) !important; /* Ensure the text is readable */
+  border-radius: var(--radius) !important;
   margin-bottom: 5px !important;
   word-wrap: break-word;
   white-space: normal;
-  /* below we set the width to always match the max width of the sub elements, but not if it goes outside the viewport */
-  /* width: 98vw !important; */
 }
 
 .Toastify__body--MetalQuoter {
-  /* we want the body of the toast to be the same width as the text */
+  /* We want the body of the toast to be the same width as the text */
   width: max-content !important;
-  /* we want the overflow to wrap the text */
+  /* We want the overflow to wrap the text */
   overflow-x: auto !important;
 }
