@@ -164,6 +164,9 @@ const rfqExtractionInstructions = `
     - If the product is available, provide the unit price and calculate the total price based on the quantity requested; ensure to include this information in the Quote object.
     - To calculate the total price, multiply the quantity by the unit price for each product, also considering any custom processing requests, if applicable.
     - Additionally, you must must think "step by step" and provide a detailed explanation of the logic behind the price calculation.
+    - YOU MUST NOT MISS ANY DETAILS, and you must be very specific and accurate in your calculations, and you must provide a detailed explanation of the logic behind the price calculation.
+    - Second to last, you must ensure you have accounted for any delivery costs in the total price calculation.
+    - The previous step is very important, and you must ensure that you have accounted for any delivery costs in the total price calculation.
     - Finally, it is critical that you are accurate and precise in your calculations and explanations, ensuring that the Quote object is correctly formatted and contains all the necessary information.
 
   4. **Format the Quote Object:**
