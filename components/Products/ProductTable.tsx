@@ -102,7 +102,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
             <CardHeader>
               <CardTitle>Products</CardTitle>
               <CardDescription>
-                Manage your products and view their sales performance.
+                Manage your products and keep track of their details
               </CardDescription>
             </CardHeader>
             <CardContent>
