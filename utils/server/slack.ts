@@ -42,6 +42,7 @@ export const sendRFQToSlack = async (rfqData: RFQDTO) => {
     },
     body: JSON.stringify({
       text: `RFQ successfully created:\n
+      - RFQ ID: ${rfqData.id}\n
       - Customer Email: ${rfqData.customerEmail}\n
       - Customer Name: ${rfqData.customerName}\n
       - Contact Person: ${rfqData.contactPerson}\n

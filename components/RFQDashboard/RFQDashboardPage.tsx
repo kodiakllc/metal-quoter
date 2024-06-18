@@ -1,6 +1,5 @@
 // /components/Products/ProductsPage.tsx
-import { RFQDTO } from '@/types/dto';
-import { ProductDTO } from '@/types/dto/ProductDTO';
+import { RFQQuote } from '@/types/dto';
 
 import Header from '@/components/Header';
 import NavigationMenu from '@/components/NavigationMenu';
@@ -9,10 +8,10 @@ import { ThemeProvider } from '@/components/providers';
 import RFQDashboard from './RFQDashboard';
 
 interface RFQDashboardPageProps {
-  rfqs: RFQDTO[];
+  rfqsAndQuotes: RFQQuote[];
 }
 
-export function RFQDashboardPage({ rfqs }: RFQDashboardPageProps) {
+export function RFQDashboardPage({ rfqsAndQuotes }: RFQDashboardPageProps) {
   // The core layout remains here, with references to the new subcomponents
   return (
     <ThemeProvider
@@ -25,7 +24,7 @@ export function RFQDashboardPage({ rfqs }: RFQDashboardPageProps) {
         <NavigationMenu />
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <Header />
-          <RFQDashboard rfqs={rfqs} />
+          <RFQDashboard rfqsAndQuotes={rfqsAndQuotes} />
         </div>
       </div>
     </ThemeProvider>

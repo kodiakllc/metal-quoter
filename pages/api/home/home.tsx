@@ -8,9 +8,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Script from 'next/script';
 
+
+
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
-import { RFQDTO } from '@/types/dto';
+import { toQuoteDTO, toRFQAndQuoteDTOs } from '@/utils/server/quote';
+import { toRFQDTO } from '@/utils/server/rfq';
+
+import { RFQDTO, RFQQuote } from '@/types/dto';
 import { ProductDTO } from '@/types/dto/ProductDTO';
 
 // import { MailPage } from '@/components/Dashboard';
@@ -25,10 +30,10 @@ import { HomeInitialState, initialState } from './home.state';
 import prisma from '@/lib/prisma-client';
 
 interface Props {
-  rfqs: RFQDTO[];
+  rfqsAndQuotes: RFQQuote[];
 }
 
-const Home = ({ rfqs }: Props) => {
+const Home = ({ rfqsAndQuotes }: Props) => {
   const { t } = useTranslation('chat');
   const [initialRender, setInitialRender] = useState<boolean>(true);
   const [whiteLabelTitle, setWhiteLabelTitle] = useState<string | null>(null);
@@ -76,7 +81,7 @@ const Home = ({ rfqs }: Props) => {
       <main
         className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
       >
-        <RFQDashboardPage rfqs={rfqs} />
+        <RFQDashboardPage rfqsAndQuotes={rfqsAndQuotes} />
       </main>
     </HomeContext.Provider>
   );
@@ -93,9 +98,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   });
 
+  // convert RFQs to RFQQuote
+  const rfqsAndQuotes = await toRFQAndQuoteDTOs(rfqs);
+
   return {
     props: {
-      rfqs: JSON.parse(JSON.stringify(rfqs)),
+      rfqsAndQuotes: rfqsAndQuotes,
       ...(await serverSideTranslations(context.locale as string, [
         'common',
         'chat',

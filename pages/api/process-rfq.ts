@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sendQuoteToSlack, sendRFQToSlack } from '@/utils/server/slack';
 import { rfqExtractionInstructions, runAssistant } from '@/utils/server/assistant';
 import { getEmailToRFQMessage, createRFQ } from '@/utils/server/rfq';
-import { convertRFQToQuote, quoteToQuoteDTO } from '@/utils/server/quote';
+import { convertRFQToQuote, toQuoteDTO } from '@/utils/server/quote';
 import { findCustomerThreadId } from '@/utils/server/customer';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -70,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Try to create a quote from the RFQ
     const { quote, threadId: newThreadId } = await convertRFQToQuote(assistantId, newRFQ);
-    const quoteDTO = await quoteToQuoteDTO(quote);
+    const quoteDTO = await toQuoteDTO(quote);
 
     // Send the quote to Slack
     await sendQuoteToSlack(quoteDTO);

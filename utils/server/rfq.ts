@@ -36,6 +36,7 @@ const toRFQDTO = async (rfq: RFQ): Promise<RFQDTO> => {
   });
 
   return {
+    id: rfq.id,
     customerEmail: customer.emailAddress,
     customerName: customer.companyName || '',
     contactPerson: customer.contactPerson || '',

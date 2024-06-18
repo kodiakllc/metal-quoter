@@ -1,6 +1,6 @@
 // /utils/server/quote.ts
 import prisma from '@/lib/prisma-client-edge';
-import { QuoteDTO, RFQDTO } from '@/types/dto';
+import { QuoteDTO, RFQDTO, RFQQuote } from '@/types/dto';
 import { findCustomerById } from '@/utils/server/customer';
 import { Quote, RFQ } from '@prisma/client';
 import { toRFQDTO } from '@/utils/server/rfq';
@@ -55,7 +55,7 @@ Promise<{ quote: Quote, threadId: string }> => {
   return { quote, threadId };
 };
 
-const quoteToQuoteDTO = async (quote: Quote): Promise<QuoteDTO> => {
+const toQuoteDTO = async (quote: Quote): Promise<QuoteDTO> => {
   const customer = await findCustomerById(quote.customerId);
 
   if (!customer) {
@@ -88,7 +88,23 @@ const quoteToQuoteDTO = async (quote: Quote): Promise<QuoteDTO> => {
   };
 };
 
+const toRFQAndQuoteDTOs = async (rfqs: any[]): Promise<RFQQuote[]> => {
+  const rfqsAndQuotes: RFQQuote[] = await Promise.all(
+    rfqs.map(async (rfq) => {
+      const rfqDTO = await toRFQDTO(rfq);
+      const quotes = await Promise.all(rfq.quotes.map(async (q: Quote) => await toQuoteDTO(q)));
+      return {
+        rfq: rfqDTO,
+        quotes: quotes,
+      };
+    })
+  );
+
+  return rfqsAndQuotes;
+}
+
 export {
-  quoteToQuoteDTO,
+  toQuoteDTO,
+  toRFQAndQuoteDTOs,
   convertRFQToQuote,
 };

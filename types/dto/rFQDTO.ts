@@ -1,5 +1,5 @@
 // /types/dto/rFQDTO.ts
-import { CustomProcessingRequestDTO } from '@/types/dto';
+import { CustomProcessingRequestDTO, QuoteDTO } from '@/types/dto';
 
 export interface RFQDetail {
   name: string;
@@ -8,6 +8,7 @@ export interface RFQDetail {
 }
 
 export interface RFQDTO {
+  id: number;
   customerEmail: string;
   customerName: string;
   contactPerson: string;
@@ -17,5 +18,6 @@ export interface RFQDTO {
   deliveryRequirements: string | null;
   additionalServices: string | null;
   customProcessingRequests: CustomProcessingRequestDTO[];
+  quotes: QuoteDTO[] | null;
   createdAt: string;
 }
