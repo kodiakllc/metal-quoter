@@ -47,7 +47,11 @@ const ProductLine: React.FC<ProductLineProps> = ({
       <TableCell className="hidden md:table-cell">
         {description ? description : 'No description'}
       </TableCell>
-      <TableCell className="hidden md:table-cell">{category}</TableCell>
+      <TableCell>
+        <div className="flex items-center space-x-2">
+          <Badge>{category}</Badge>
+        </div>
+      </TableCell>
       <TableCell className="hidden md:table-cell">{createdAt}</TableCell>
       <TableCell className="hidden md:table-cell">{updatedAt}</TableCell>
       <TableCell>
