@@ -72,7 +72,7 @@ const Header = () => {
             className="overflow-hidden rounded-full"
           >
             <Image
-              src="/placeholder-user.jpg"
+              src="/placeholder.svg"
               width={36}
               height={36}
               alt="Avatar"
