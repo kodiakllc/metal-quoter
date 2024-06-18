@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'approve':
         return changeQuoteStatus(quoteId, 'approved', res);
       case 'unapprove':
-        return changeQuoteStatus(quoteId, 'unapproved', res);
+        return changeQuoteStatus(quoteId, 'draft', res);
       default:
         return res.status(400).json({ error: 'Invalid action' });
     }

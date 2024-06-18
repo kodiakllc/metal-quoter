@@ -253,7 +253,7 @@ const RFQQuoteDetail: React.FC<RFQQuoteDetailProps> = ({
               <li className="flex items-center justify-between font-semibold">
                 <span className="text-muted-foreground">Status</span>
                 <Badge
-                  className={quote.status === 'approved' ? 'bg-green-700' : ''}
+                  className={quote.status === 'approved' ? 'bg-green-700' : quote.status === 'denied' ? 'bg-red-700' : ''}
                   variant="outline"
                 >
                   {quote.status}
