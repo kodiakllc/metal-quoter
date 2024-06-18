@@ -49,6 +49,7 @@ const toRFQDTO = async (rfq: RFQ): Promise<RFQDTO> => {
       processingType: request.processingType,
       specifications: request.specifications as Record<string, any>,
     })),
+    quotes: null,
     createdAt: rfq.createdAt.toISOString(),
   };
 };
