@@ -346,7 +346,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
@@ -391,7 +391,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
@@ -436,7 +436,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
@@ -481,7 +481,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
@@ -526,7 +526,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
@@ -571,7 +571,7 @@ export function Products() {
                               alt="Product image"
                               className="aspect-square rounded-md object-cover"
                               height="64"
-                              src="/placeholder.svg"
+                              src="/img/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
