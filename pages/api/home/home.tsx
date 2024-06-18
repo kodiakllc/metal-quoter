@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
 
   // convert RFQs to RFQQuote
-  const rfqsAndQuotes = await toRFQAndQuoteDTOs(rfqs);
+  const rfqsAndQuotes = rfqs.length > 0 ? await toRFQAndQuoteDTOs(rfqs) : [];
 
   return {
     props: {
