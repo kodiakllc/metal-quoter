@@ -101,6 +101,7 @@
     "rehype-mathjax": "^4.0.2",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
+    "repo-to-pdf": "^0.1.8",
     "snakify-ts": "2.3.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^1.14.0",
