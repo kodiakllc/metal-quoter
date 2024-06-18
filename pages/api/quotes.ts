@@ -11,7 +11,7 @@ const handler = async (req: Request) => {
 
     switch (method) {
       case 'POST':
-        return handlePost(req);
+        return await handlePost(req);
       // Additional cases for other methods (GET, PUT, DELETE) can be added here
       default:
         return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
