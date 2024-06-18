@@ -45,7 +45,7 @@ const ProductLine: React.FC<ProductLineProps> = ({
         <Badge variant="outline">{status}</Badge>
       </TableCell> */}
       <TableCell className="hidden md:table-cell">
-        ${description ? description : 'No description'}
+        {description ? description : 'No description'}
       </TableCell>
       <TableCell className="hidden md:table-cell">{category}</TableCell>
       <TableCell className="hidden md:table-cell">{createdAt}</TableCell>
