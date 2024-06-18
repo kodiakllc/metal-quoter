@@ -10,12 +10,13 @@ import Script from 'next/script';
 
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
+import { RFQDTO } from '@/types/dto';
 import { ProductDTO } from '@/types/dto/ProductDTO';
 
-import { MailPage } from '@/components/Dashboard';
-import { DashboardOld } from '@/components/Dashboard.old';
-import { accounts, mails } from '@/components/Dashboard/data';
+// import { MailPage } from '@/components/Dashboard';
+import { RFQDashboardPage } from '@/components/RFQDashboard';
 
+// import { accounts, mails } from '@/components/Dashboard/data';
 // import useErrorService from '@/services/errorService';
 // import useApiService from '@/services/useApiService';
 import HomeContext from './home.context';
@@ -24,16 +25,10 @@ import { HomeInitialState, initialState } from './home.state';
 import prisma from '@/lib/prisma-client';
 
 interface Props {
-  serverSideApiKeyIsSet: boolean;
-  serverSideGuestCodeIsSet: boolean;
-  products: ProductDTO[];
+  rfqs: RFQDTO[];
 }
 
-const Home = ({
-  serverSideApiKeyIsSet,
-  serverSideGuestCodeIsSet,
-  products,
-}: Props) => {
+const Home = ({ rfqs }: Props) => {
   const { t } = useTranslation('chat');
   const [initialRender, setInitialRender] = useState<boolean>(true);
   const [whiteLabelTitle, setWhiteLabelTitle] = useState<string | null>(null);
@@ -81,7 +76,7 @@ const Home = ({
       <main
         className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
       >
-        <MailPage products={undefined} />
+        <RFQDashboardPage rfqs={rfqs} />
       </main>
     </HomeContext.Provider>
   );
@@ -90,18 +85,21 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // Convert Date objects to ISO strings
-  const products = await prisma?.product.findMany();
-  const serializedProducts: ProductDTO[] = products.map((product) => ({
-    ...product,
-    createdAt: product.createdAt.toISOString(), // Serialize date
-    updatedAt: product.updatedAt.toISOString(), // Serialize date
-  }));
+  const rfqs = await prisma.rFQ.findMany({
+    include: {
+      quotes: true,
+      customer: true,
+      customProcessingRequests: true,
+    },
+  });
+
   return {
     props: {
-      serverSideApiKeyIsSet: !!process.env.OPENAI_API_KEY,
-      serverSideGuestCodeIsSet: !!process.env.GUEST_CODES,
-      products: serializedProducts,
-      ...(await serverSideTranslations(context.locale ?? 'en', ['common'])),
+      rfqs: JSON.parse(JSON.stringify(rfqs)),
+      ...(await serverSideTranslations(context.locale as string, [
+        'common',
+        'chat',
+      ])),
     },
   };
 };
