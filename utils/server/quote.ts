@@ -38,34 +38,15 @@ Promise<{ quote: Quote, threadId: string }> => {
     {
       model: 'gpt-4-1106-preview', // using this model for the assistant, since I've had good results with it.
       // using a lower temperature for more deterministic results
-      temperature: 0.5,
+      temperature: 0.221,
       top_p: 1,
     },
     message
   );
 
-  // we loop the structured data back into the assistant again with the validatePotentialQuoteInstructions
-  // to get the assistant to validate the quote data
-  const validationMessage = JSON.stringify({
-    rfq: rfqDTO,
-    stockItems: stockItemsWithProducts,
-    "quote Data To Validate After Being Transformed That Should Be Returned In The Same Format (`structuredData`)": quoteData
-  });
-  const { structuredData: quoteData2, threadId: validationThreadId } = await runAssistant(
-    assistantId,
-    threadId,
-    validatePotentialQuoteInstructions,
-    {
-      model: 'gpt-4-0125-preview',
-      temperature: 1.42,
-      top_p: 0.85,
-    },
-    validationMessage
-  );
-
   const quote = await prisma.quote.create({
     data: {
-      ...quoteData2,
+      ...quoteData,
       rfqId: rfq.id,
       customerId: rfq.customerId,
     },
