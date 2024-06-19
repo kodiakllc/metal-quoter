@@ -150,7 +150,7 @@ const rfqExtractionInstructions = `
     - Include the following fields in the Quote object:
       - **customerId**: The ID of the customer.
       - **rfqId**: The ID of the RFQ.
-      - **totalPrice**: The calculated total price for the quote.
+      - **totalPrice**: The calculated total price based on the logic behind the price (must exactly match the total price calculated in step 1)
       - **deliveryOptions**: Derived from the delivery requirements of the RFQ.
       - **paymentTerms**: Set standard payment terms (e.g., "30 days net").
       - **validityPeriod**: The period for which the quote is valid (e.g., 30 days from the current date).
