@@ -241,16 +241,9 @@ const validatePotentialQuoteInstructions = `
     - Check that the status of the Quote is set to "draft."
     - Ensure that the status accurately reflects the state of the Quote object.
 
-  8. **Provide Feedback:**
+  8. **Return the information:**
     - If any discrepancies are found in the Quote object, adjust them and return the exact same structure with the corrected values.
     - If the Quote object is accurate and correctly filled out, return the same structure without any modifications.
-
-  9. **Be Thorough:**
-    - It is crucial that you carefully review each field of the Quote object and provide detailed feedback on any issues found.
-    - Ensure that the Quote object is correctly formatted and contains all the necessary information for further processing.
-
-  10. **Accuracy is Key:**
-    - Your validation must be accurate and precise, ensuring that the Quote object is valid and ready for approval.
 
   Here is the Quote object you need to validate:
 `;

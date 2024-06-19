@@ -51,9 +51,9 @@ Promise<{ quote: Quote, threadId: string }> => {
     threadId,
     validatePotentialQuoteInstructions,
     {
-      model: 'gpt-4-1106-preview',
-      temperature: 0.5,
-      top_p: 1,
+      model: 'gpt-4-0125-preview',
+      temperature: 1.42,
+      top_p: 0.85,
     },
     `The initial message is: \n\n` + message + `\n\n The quote data to validate is as follows: \n\n ${JSON.stringify(quoteData)}`
   );
