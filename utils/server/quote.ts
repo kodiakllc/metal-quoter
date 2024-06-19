@@ -4,7 +4,7 @@ import { QuoteDTO, RFQDTO, RFQQuote } from '@/types/dto';
 import { findCustomerById } from '@/utils/server/customer';
 import { Quote, RFQ } from '@prisma/client';
 import { toRFQDTO } from '@/utils/server/rfq';
-import { convertRFQToQuoteInstructions, runAssistant } from '@/utils/server/assistant';
+import { convertRFQToQuoteInstructions, validatePotentialQuoteInstructions, runAssistant } from '@/utils/server/assistant';
 
 const convertRFQToQuote = async (assistantId: string, rfq: RFQ):
 Promise<{ quote: Quote, threadId: string }> => {
@@ -38,15 +38,28 @@ Promise<{ quote: Quote, threadId: string }> => {
     {
       model: 'gpt-4-1106-preview', // using this model for the assistant, since I've had good results with it.
       // using a lower temperature for more deterministic results
-      temperature: 0,
+      temperature: 0.5,
       top_p: 1,
     },
     message
   );
 
+  // run through assistant again to ensure the data is correct
+  const { structuredData: quoteData2 } = await runAssistant(
+    assistantId,
+    threadId,
+    validatePotentialQuoteInstructions,
+    {
+      model: 'gpt-4o',
+      temperature: 0,
+      top_p: 1,
+    },
+    JSON.stringify(quoteData)
+  );
+
   const quote = await prisma.quote.create({
     data: {
-      ...quoteData,
+      ...quoteData2,
       rfqId: rfq.id,
       customerId: rfq.customerId,
     },
