@@ -1,5 +1,5 @@
 // /pages/api/process-rfq.ts
-import prisma from '@/lib/prisma-client';
+import prisma from '@/lib/prisma-client-edge';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sendQuoteToSlack, sendRFQToSlack } from '@/utils/server/slack';
 import { rfqExtractionInstructions, runAssistant } from '@/utils/server/assistant';
