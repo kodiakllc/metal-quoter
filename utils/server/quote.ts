@@ -46,6 +46,11 @@ Promise<{ quote: Quote, threadId: string }> => {
 
   // we loop the structured data back into the assistant again with the validatePotentialQuoteInstructions
   // to get the assistant to validate the quote data
+  const validationMessage = JSON.stringify({
+    rfq: rfqDTO,
+    stockItems: stockItemsWithProducts,
+    "quote Data To Validate After Being Transformed That Should Be Returned In The Same Format (`structuredData`)": quoteData
+  });
   const { structuredData: quoteData2, threadId: validationThreadId } = await runAssistant(
     assistantId,
     threadId,
@@ -55,7 +60,7 @@ Promise<{ quote: Quote, threadId: string }> => {
       temperature: 1.42,
       top_p: 0.85,
     },
-    `The initial message is: \n\n` + message + `\n\n The quote data to validate is as follows: \n\n ${JSON.stringify(quoteData)}`
+    validationMessage
   );
 
   const quote = await prisma.quote.create({
