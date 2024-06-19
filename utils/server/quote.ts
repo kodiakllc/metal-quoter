@@ -38,7 +38,7 @@ Promise<{ quote: Quote, threadId: string }> => {
     {
       model: 'gpt-4-1106-preview', // using this model for the assistant, since I've had good results with it.
       // using a lower temperature for more deterministic results
-      temperature: 0.221,
+      temperature: 0.5,
       top_p: 1,
     },
     message

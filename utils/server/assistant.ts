@@ -187,6 +187,14 @@ const rfqExtractionInstructions = `
   }
   \`\`\`
 
+  5. **Validate that the Quote Object is Correct:**
+  - Check that the logic behind the price contains the information you provided in the previous steps, and that the totalPrice matches the sum provided in the logic behind the price. If the totalPrice does not match the sum, you must correct it.
+  - Ensure that the delivery options are correctly derived from the delivery requirements.
+  - Validate that the payment terms are set to standard terms.
+  - Confirm that the validity period is set to a reasonable duration.
+  - Review the additional information and ensure it is relevant and accurate.
+  - Check that the status is set to "draft."
+
   Here is the structured RFQ data for which you need to generate a Quote:
 `;
 
