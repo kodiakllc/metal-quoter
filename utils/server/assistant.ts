@@ -190,68 +190,67 @@ const rfqExtractionInstructions = `
 const validatePotentialQuoteInstructions = `
 **System Prompt:**
 
-### 🌟 Hello! Let’s Break Down the Quote Object and Ensure Everything’s on Point! 🌟
+### 🌟 Hello! Let’s Correct an Improper Quote Object! 🌟
 
-**From the text:** Let’s take a detailed look at your provided Quote object and validate it step by step.
+**From the text:** Let's examine the provided improper Quote object and correct it.
 
-#### Provided Quote Object:
+#### Provided Improper Quote Object:
 
 \`\`\`json
 {
-  "customerId": "cloudforge@example.com",
-  "rfqId": 41,
-  "totalPrice": 6250.00,
-  "deliveryOptions": "Deliver to Chicago, IL by MM/DD/YYYY, Need price for both pickup and delivery",
-  "paymentTerms": "30 days net",
-  "validityPeriod": "2024-07-19T02:18:06.550Z",
-  "additionalInformation": "All requested items are available. Delivery options and associated costs need to be discussed with the customer.",
-  "logicBehindThePrice": "The total price is calculated based on the unit prices and quantities of the requested items. Stainless Steel Sheets (50 units at $30/unit) total $1500. Aluminum Rods (100 units at $12.5/unit) total $1250. No custom processing requests were made. Total price is the sum of all items: $1500 + $1250 = $2750. Since the quantity of Aluminum Rods matches the available stock, it's assumed all can be supplied without delay.",
+  "customerId": "john_doe@example.com",
+  "rfqId": "RFQ_789",
+  "totalPrice": 27005.00,
+  "deliveryOptions": "Deliver to Los Angeles, CA by 12/01/2024",
+  "paymentTerms": "Net 45 days",
+  "validityPeriod": "2024-11-30T12:00:00.000Z",
+  "additionalInformation": "Ensure the items are packaged securely. Call customer before delivery.",
+  "logicBehindThePrice": "The total price is calculated based on the unit prices and quantities of the requested items. Titanium Bolts (500 units at $25/unit) total $12500. Steel Sheets (200 units at $12.5/unit) total $2500. Total price is the sum of all items: $12500 + $2500 = $15000.",
   "status": "draft",
-  "createdAt": "2024-06-19T02:18:06.550Z"
+  "createdAt": "2024-10-01T12:00:00.000Z"
 }
 \`\`\`
 
-#### 🕵️ Validation Steps:
+#### 🕵️ Validation Steps and Corrections:
 
 1. **Customer ID and RFQ ID:**
-   - The \`customerId\` should be an integer representing the customer’s ID.
-   - Here, it’s an email address (\`"cloudforge@example.com"\`), which needs to be corrected.
+   - The \`customerId\` should be an integer representing the customer’s ID. Here, it's an email address (\`"john_doe@example.com"\`), which needs to be corrected.
+   - The \`rfqId\` should be an integer representing the RFQ identifier. Here, it's a string (\`"RFQ_789"\`), which needs to be corrected.
 
 2. **Total Price Calculation:**
    - **Details from the provided quote:**
-     - Stainless Steel Sheets: 50 units at $30/unit => $1500
-     - Aluminum Rods: 100 units at $12.5/unit => $1250
+     - Titanium Bolts: 500 units at $25/unit => $12500
+     - Steel Sheets: 200 units at $12.5/unit => $2500
    - **Calculated Total Price:**
-     - Sum of $1500 (Stainless Steel Sheets) + $1250 (Aluminum Rods) = $2750
-   - The provided total price (\`$6250.00\`) doesn’t match the calculated total ($2750.00).
+     - Sum of $12500 (Titanium Bolts) + $2500 (Steel Sheets) = $15000
+   - The provided total price (\`$27005.00\`) doesn’t match the calculated total ($15000.00).
 
 3. **Delivery Options, Payment Terms, and Validity Period:**
-   - The delivery options seem detailed but ensure the date format (\`MM/DD/YYYY\`) is correctly filled.
-   - Payment terms (\`30 days net\`) and validity period (\`2024-07-19T02:18:06.550Z\`) are clear.
+   - Delivery options seem detailed and correctly formatted.
+   - Payment terms (\`Net 45 days\`) and validity period (\`2024-11-30T12:00:00.000Z\`) are clear.
 
 4. **Additional Information and Logic Behind the Price:**
    - The explanation for the price logic is clear and aligns with the detailed calculation provided.
-   - However, it doesn’t justify the total price of \`$6250.00\`.
 
 5. **Status and Creation Date:**
-   - The status (\`draft\`) and creation date (\`2024-06-19T02:18:06.550Z\`) are appropriate.
+   - The status (\`draft\`) and creation date (\`2024-10-01T12:00:00.000Z\`) are appropriate.
 
 ### 🛠️ Corrected Quote Object:
 
-Based on the validations, let’s adjust the \`customerId\` and ensure the \`totalPrice\` is accurate:
+Based on the validations, let's correct the \`customerId\` and \`rfqId\`:
 
 \`\`\`json
 {
-  "customerId": 1, // Assuming a valid integer ID
-  "rfqId": 41,
-  "totalPrice": 2750.00, // Corrected based on the detailed calculation
-  "deliveryOptions": "Deliver to Chicago, IL by MM/DD/YYYY, Need price for both pickup and delivery",
-  "paymentTerms": "30 days net",
-  "validityPeriod": "2024-07-19T02:18:06.550Z",
-  "additionalInformation": "All requested items are available. Delivery options and associated costs need to be discussed with the customer.",
-  "logicBehindThePrice": "The total price is calculated based on the unit prices and quantities of the requested items. Stainless Steel Sheets (50 units at $30/unit) total $1500. Aluminum Rods (100 units at $12.5/unit) total $1250. No custom processing requests were made. Total price is the sum of all items: $1500 + $1250 = $2750. Since the quantity of Aluminum Rods matches the available stock, it's assumed all can be supplied without delay.",
+  "customerId": 123, // Assuming a valid integer ID
+  "rfqId": 789, // Corrected to an integer ID
+  "totalPrice": 15000.00, // Corrected based on the detailed calculation
+  "deliveryOptions": "Deliver to Los Angeles, CA by 12/01/2024",
+  "paymentTerms": "Net 45 days",
+  "validityPeriod": "2024-11-30T12:00:00.000Z",
+  "additionalInformation": "Ensure the items are packaged securely. Call customer before delivery.",
+  "logicBehindThePrice": "The total price is calculated based on the unit prices and quantities of the requested items. Titanium Bolts (500 units at $25/unit) total $12500. Steel Sheets (200 units at $12.5/unit) total $2500. Total price is the sum of all items: $12500 + $2500 = $15000.",
   "status": "draft",
-  "createdAt": "2024-06-19T02:18:06.550Z"
+  "createdAt": "2024-10-01T12:00:00.000Z"
 }
 \`\`\`
 
