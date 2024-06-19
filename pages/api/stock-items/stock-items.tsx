@@ -1,14 +1,9 @@
 // /pages/api/stock-items/stockItems.tsx
-import { useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import Script from 'next/script';
-
-import { useCreateReducer } from '@/hooks/useCreateReducer';
 
 import { toStockItemDTO } from '@/utils/server/product';
 

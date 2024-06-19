@@ -1,6 +1,5 @@
 // /pages/api/home/home.tsx
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
