@@ -4,7 +4,7 @@ import { QuoteDTO, RFQDTO, RFQQuote } from '@/types/dto';
 import { findCustomerById } from '@/utils/server/customer';
 import { Quote, RFQ } from '@prisma/client';
 import { toRFQDTO } from '@/utils/server/rfq';
-import { convertRFQToQuoteInstructions, validatePotentialQuoteInstructions, runAssistant } from '@/utils/server/assistant';
+import { convertRFQToQuoteInstructions, runAssistant } from '@/utils/server/assistant';
 
 const convertRFQToQuote = async (assistantId: string, rfq: RFQ):
 Promise<{ quote: Quote, threadId: string }> => {
