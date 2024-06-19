@@ -1,5 +1,5 @@
 // /components/Header.tsx
-import { File, ListFilter, PlusCircle, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+
 
 const Header = () => {
   const { asPath, query } = useRouter();

@@ -36,7 +36,7 @@ Promise<{ quote: Quote, threadId: string }> => {
     null,
     convertRFQToQuoteInstructions,
     {
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4-1106-preview', // using this model for the assistant, since I've had good results with it.
       // using a lower temperature for more deterministic results
       temperature: 0.5,
       top_p: 1,
@@ -51,7 +51,7 @@ Promise<{ quote: Quote, threadId: string }> => {
     threadId,
     validatePotentialQuoteInstructions,
     {
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o-2024-05-13', // using a different model for validation
       temperature: 0.5,
       top_p: 1,
     },

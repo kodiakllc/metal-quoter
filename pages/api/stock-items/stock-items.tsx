@@ -12,7 +12,6 @@ import { StockItemDTO } from '@/types/dto/StockItemDTO';
 import { StockItemPage } from '@/components/StockItems';
 
 import prisma from '@/lib/prisma-client';
-import { StockItem } from '@prisma/client';
 
 interface Props {
   stockItems: StockItemDTO[];

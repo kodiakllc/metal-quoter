@@ -1,5 +1,5 @@
 // /pages/api/home/home.tsx
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -7,26 +7,23 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Script from 'next/script';
 
-
-
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
-import { toQuoteDTO, toRFQAndQuoteDTOs } from '@/utils/server/quote';
-import { toRFQDTO } from '@/utils/server/rfq';
+import { toRFQAndQuoteDTOs } from '@/utils/server/quote';
 
-import { RFQDTO, RFQQuote } from '@/types/dto';
-import { ProductDTO } from '@/types/dto/ProductDTO';
+import { RFQQuote } from '@/types/dto';
 
-// import { MailPage } from '@/components/Dashboard';
 import { RFQDashboardPage } from '@/components/RFQDashboard';
 
-// import { accounts, mails } from '@/components/Dashboard/data';
-// import useErrorService from '@/services/errorService';
-// import useApiService from '@/services/useApiService';
+
+
 import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
+
+
 import prisma from '@/lib/prisma-client';
+
 
 interface Props {
   rfqsAndQuotes: RFQQuote[];

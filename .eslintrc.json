@@ -7,6 +7,6 @@
     "unused-imports"
   ],
   "rules": {
-    "unused-imports/no-unused-imports-ts": "warn"
+    "unused-imports/no-unused-imports-ts": "error"
   }
 }
