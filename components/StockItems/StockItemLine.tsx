@@ -51,14 +51,30 @@ const StockItemLine: React.FC<StockItemLineProps> = ({
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap gap-2">
           <Badge>{category}</Badge>
           <Badge>{quantityInStock} in stock</Badge>
-          <Badge>${unitPrice}</Badge>
+          <Badge>${unitPrice} / unit</Badge>
         </div>
       </TableCell>
-      <TableCell>{createdAt}</TableCell>
-      <TableCell>{updatedAt}</TableCell>
+      {/* <TableCell>{createdAt}</TableCell>
+      we instead list the specification as little badges and capitalize the first letter of the key: */}
+      <TableCell>
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(specification).map(([key, value]) => (
+            <Badge key={key}>
+              {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+            </Badge>
+          ))}
+        </div>
+      </TableCell>
+      <TableCell>{
+        new Date(updatedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      }</TableCell>
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -48,12 +48,24 @@ const ProductLine: React.FC<ProductLineProps> = ({
         {description ? description : 'No description'}
       </TableCell>
       <TableCell>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap gap-2">
           <Badge>{category}</Badge>
         </div>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{createdAt}</TableCell>
-      <TableCell className="hidden md:table-cell">{updatedAt}</TableCell>
+      <TableCell className="hidden md:table-cell">{
+        new Date(createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      }</TableCell>
+      <TableCell className="hidden md:table-cell">{
+        new Date(updatedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      }</TableCell>
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -132,7 +132,7 @@ const StockItemTable: React.FC<StockItemTableProps> = ({ stockItems }) => {
                     </TableHead>
                     <TableHead>Details</TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Created at
+                      Specifications
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
                       Updated at
