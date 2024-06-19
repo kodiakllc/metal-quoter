@@ -42,3 +42,6 @@ pnpm-lock.yaml
 # playright
 public/playright/
 public/playright
+
+# repo-to-pdf output
+scripts/repo-to-pdf/output/**
