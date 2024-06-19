@@ -51,7 +51,7 @@ Promise<{ quote: Quote, threadId: string }> => {
     threadId,
     validatePotentialQuoteInstructions,
     {
-      model: 'gpt-4o-2024-05-13', // using a different model for validation
+      model: 'gpt-4-1106-preview',
       temperature: 0.5,
       top_p: 1,
     },
