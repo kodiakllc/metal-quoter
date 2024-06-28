@@ -5,6 +5,10 @@ Welcome to Metal Quoter! This system is designed to help manage quotes, RFQs (Re
 ### Note: This is a take-home project for a job application in which I was asked to design and implement a system for managing quotes, RFQs, and inventory for a metal service center within 7 days.
 - Link to the specifications: [Take-Home Screen](https://kodiakllc.notion.site/Take-Home-Screen-ec3477d8d6ec49dbbf123ebf407b4d36)
 
+## Try It Out
+
+You can send a quote to `quote@kdk.dev` and a corresponding RFQ and quote will appear at [https://mq.kdk.dev/](https://mq.kdk.dev/).
+
 ## Table of Contents
 
 - [Features](#features)
@@ -233,10 +237,6 @@ The Metal Quoter project is a Next.js application designed to help metal service
 3. **Unit Tests:** Increase test coverage to ensure robustness and reliability of the application.
 4. **User Authentication:** Implement user authentication to secure the application and provide personalized experiences.
 5. **Everything Else:** Complete the missing functionality, including the ability to add products, manage stock, and generate quotes, etc.
-
-## Try It Out
-
-You can send a quote to `quote@kdk.dev` and a corresponding RFQ and quote will appear at [https://mq.kdk.dev/](https://mq.kdk.dev/).
 
 ## Contact
 
