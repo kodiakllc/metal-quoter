@@ -1,3 +1,4 @@
 name = "metal-quoter-email-worker"
 main = "src/index.ts"
 compatibility_date = "2024-06-16"
+[vars]

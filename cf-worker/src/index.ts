@@ -1,9 +1,12 @@
 // /cf-worker/src/index.ts
-export interface Env {}
 import PostalMime from 'postal-mime';
 
-const slackSuccess = async (sender: string, recipient: string, subject: string, response: any) => {
-  await fetch('https://hooks.slack.com/services/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', {
+export interface Env {
+  SLACK_WEBHOOK_URL: string;
+}
+
+const slackSuccess = async (webhookUrl: string, sender: string, recipient: string, subject: string, response: any) => {
+  await fetch(webhookUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application-json',
@@ -18,9 +21,9 @@ const slackSuccess = async (sender: string, recipient: string, subject: string, 
   });
 }
 
-const slackError = async (sender: string, recipient: string, error: any) => {
+const slackError = async (webhookUrl: string, sender: string, recipient: string, error: any) => {
   console.error('Error processing email: ', error.toString());
-  await fetch('https://hooks.slack.com/services/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', {
+  await fetch(webhookUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application-json',
@@ -71,11 +74,11 @@ export default {
       }
 
       // Notify the Slack channel about the successful email processing.
-      await slackSuccess(sender, recipient, email.subject ?? '[No Subject]', response);
+      await slackSuccess(env.SLACK_WEBHOOK_URL, sender, recipient, email.subject ?? '[No Subject]', response);
 
     } catch (error: any) {
       console.error('Error processing email:', error.toString());
-      await slackError(sender, recipient, error);
+      await slackError(env.SLACK_WEBHOOK_URL, sender, recipient, error);
     }
   },
 };
