@@ -1,4 +1,4 @@
-## Metal Quoter
+# Metal Quoter
 
 Welcome to Metal Quoter! This system is designed to help manage quotes, RFQs (Requests for Quotes), and inventory for a metal service center. Our goal is to streamline the process of generating quotes based on customer requests and ensuring accurate and efficient management of stock and customer data.
 
