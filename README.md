@@ -2,7 +2,7 @@
 
 Welcome to Metal Quoter! This system is designed to help manage quotes, RFQs (Requests for Quotes), and inventory for a metal service center. Our goal is to streamline the process of generating quotes based on customer requests and ensuring accurate and efficient management of stock and customer data.
 
-#### Note: This is a take-home project for a job application in which I was asked to design and implement a system for managing quotes, RFQs, and inventory for a metal service center within 7 days.
+### Note: This is a take-home project for a job application in which I was asked to design and implement a system for managing quotes, RFQs, and inventory for a metal service center within 7 days.
 - Link to the specifications: [Take-Home Screen](https://kodiakllc.notion.site/Take-Home-Screen-ec3477d8d6ec49dbbf123ebf407b4d36)
 
 ## Table of Contents
