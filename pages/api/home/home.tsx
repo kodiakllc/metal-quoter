@@ -52,14 +52,14 @@ const Home = ({ rfqsAndQuotes }: Props) => {
         ...contextValue,
       }}
     >
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-4F8XE3JTK6" />
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-SGCWKJ7K4G" />
       <Script id="google-analytics">
         {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-4F8XE3JTK6');
+            gtag('config', 'G-SGCWKJ7K4G');
           `}
       </Script>
       <Head>
